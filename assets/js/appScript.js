@@ -1,3 +1,4 @@
+// DO NOT USE 
 'use strict';
 const cityInputElemt = document.querySelector('form');
 const searchButton = document.querySelector('.search-button');
