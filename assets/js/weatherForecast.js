@@ -13,8 +13,6 @@ function displayWeatherForecast(forecast) {
 
 //Create Variables for the API Call
 
-//Construct a Query URL to Make the API Call
-
 //Make the API Call Using Fetch
 
 //// get weather information
