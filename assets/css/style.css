@@ -1,5 +1,35 @@
+:root {
+  --cl-primary: #5ec576;
+  --cl-secondary: #ffcb03;
+  --cl-tertiary: #ff585f;
+  --cl-primary-darker: #4bbb7d;
+  --cl-secondary-darker: #ffbb00;
+  --cl-tertiary-darker: #fd424b;
+  --cl-primary-opacity: #0b0980d8;
+  --cl-secondary-opacity: #ffcd0331;
+  --cl-tertiary-opacity: #ff58602d;
+  /* --gradient-primary: linear-gradient(to top left, #39b385, #9be15d);
+  --gradient-secondary: linear-gradient(to top left, #ffcb03, #ffee03);   */
+  --gradient-primary: linear-gradient(to top left, #393bb3, #5dd2e1);
+  --gradient-secondary: linear-gradient(to top left, #03c4ff, #68ff03);  
+}
 
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
 
+#header {
+  background: var(--gradient-primary);
+}
+
+#main {
+  background: var(--gradient-secondary);
+}
 #search-btn {
   width: 100%;
+}
+#five-day-weather-cards {
+  background: var(--cl-primary-opacity) !important;
 }
