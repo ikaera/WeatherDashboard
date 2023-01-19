@@ -1,4 +1,7 @@
 'use strict';
+// var localizedFormat = require('dayjs/plugin/localizedFormat')
+// dayjs.extend(localizedFormat)
+
 const APIKey = 'be7058c093e84628bb5922daf319347b';
 let storredCities = JSON.parse(localStorage.getItem('cities')) || [];
 const cityFormEl = document.querySelector('form');
@@ -6,6 +9,17 @@ const cityInput = document.querySelector('#city-input');
 
 function displayCurrentWeather(currentWeather) {
   console.log(currentWeather);
+ 
+  console.log(dayjs().format('MM/DD/YYYY'));
+  var iconUrl = `https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`;
+
+  console.log(currentWeather.dt);
+  console.log(iconUrl);
+  console.log(currentWeather.main.temp);
+  console.log(currentWeather.main.feels_like);
+  console.log(currentWeather.wind.speed);
+  console.log(currentWeather.main.humidity);
+  
 }
 function displayWeatherForecast(forecast) {
   console.log(forecast);
@@ -21,7 +35,7 @@ function getWeatherForcast(data) {
 
   // const base = '"http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;';
   // const query = `${id}?apikey=${key}`;
-  const requestUrl = "http://api.openweathermap.org/data/2.5/forecast?lon=" + data.longitude + "&lat=" + data.latitude + "&appid=" + APIKey;
+  const requestUrl = "http://api.openweathermap.org/data/2.5/forecast?lon=" + data.longitude + "&lat=" + data.latitude + "&appid=" + APIKey+'&units=imperial';
 
   fetch(requestUrl)
     .then(function (response) {
@@ -36,7 +50,7 @@ function getWeatherForcast(data) {
 //Using the OpenWeatherMap APIs, how could we retrieve geographical coordinates given a city name.
 function getGeoCoordinates(city) {
   const base = 'https://api.openweathermap.org/data/2.5/weather';
-  const query = `?q=${city}&appid=${APIKey}`;
+  const query = `?q=${city}&appid=${APIKey}&units=imperial`;
 
   const requestUrl = base + query;
 
@@ -49,7 +63,7 @@ function getGeoCoordinates(city) {
       }
     })
     .then(function (data) {
-      console.log(data);
+      // console.log(data);
       let cityInformation = {
         cityName: data.name,
         longitude: data.coord.lon,
