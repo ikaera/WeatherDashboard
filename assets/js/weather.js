@@ -10,15 +10,17 @@ const cityInput = document.querySelector('#city-input');
 function displayCurrentWeather(currentWeather) {
   console.log(currentWeather);
  
-  console.log(dayjs().format('MM/DD/YYYY'));
+  // console.log(dayjs().format('MM/DD/YYYY'));
   var iconUrl = `https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`;
 
-  console.log(currentWeather.dt);
-  console.log(iconUrl);
-  console.log(currentWeather.main.temp);
-  console.log(currentWeather.main.feels_like);
-  console.log(currentWeather.wind.speed);
-  console.log(currentWeather.main.humidity);
+  // console.log(currentWeather.dt);
+  // console.log(iconUrl);
+  // console.log(currentWeather.main.temp);
+  // console.log(currentWeather.main.feels_like);
+  // console.log(currentWeather.wind.speed);
+  // console.log(currentWeather.main.humidity);
+
+  console.log((dayjs((currentWeather.dt +currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
   
 }
 function displayWeatherForecast(forecast) {
@@ -63,7 +65,7 @@ function getGeoCoordinates(city) {
       }
     })
     .then(function (data) {
-      // console.log(data);
+      console.log(data);
       let cityInformation = {
         cityName: data.name,
         longitude: data.coord.lon,
