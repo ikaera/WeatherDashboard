@@ -113,7 +113,7 @@ function displayWeatherForecast(forecast) {
 
 //Make the API Call Using Fetch
 
-//// get weather information
+//// Using the OpenWeatherMap API 'forecast', to retrieve 5-day foecast.
 
 function getWeatherForcast(data) {
 
@@ -131,7 +131,7 @@ function getWeatherForcast(data) {
 
 };
 
-//Using the OpenWeatherMap APIs, how could we retrieve geographical coordinates given a city name.
+//Using the OpenWeatherMap API 'weather', to retrieve geographical coordinates given a city name.
 function getGeoCoordinates(city) {
   const base = 'https://api.openweathermap.org/data/2.5/weather';
   const query = `?q=${city}&appid=${APIKey}&units=imperial`;
