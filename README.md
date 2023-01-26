@@ -1,9 +1,6 @@
-# Mod6-Server-Side-APIs-Challenge-WeatherDashboard
-Server-Side APIs Challenge: Weather Dashboard
-
-//*
-
 # 06 Server-Side APIs: Weather Dashboard
+
+<!-- <div><h1 align="center">Server-Side APIs Challenge: Weather Dashboard</h1> </div> -->
 
 ## Your Task
 

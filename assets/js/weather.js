@@ -58,14 +58,13 @@ function displayCurrentWeather(currentWeather) {
   </div>
 `
 
-  console.log((dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
-
+  // console.log((dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
+  return;
 }
 
-
+let days = 0;
 function displayWeatherForecast(forecast) {
   console.log(forecast);
-  let days = 0;
   for (let i = 0; i < forecast.list.length; i++) {
     const cityName = forecast.city.name;
     const date = dayjs(forecast.list[i].dt_txt).format('ddd MM/DD/YYYY hh:mm:ss a');
@@ -79,7 +78,7 @@ function displayWeatherForecast(forecast) {
       // let card = document.createElement(div);
       // card.setAttribute('class','card col-2.m1 bg-primary text-white p-1 m-2');
 
-      forecastCards[days].innerHTML += `
+      forecastCards[days].innerHTML = `
     <h4 class="my-2">${cityName} </h4>
     <h5>${date}</h5> 
     <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
@@ -107,6 +106,7 @@ function displayWeatherForecast(forecast) {
       days++;
     }
   }
+  days = 0;
 }
 
 //Create Variables for the API Call
@@ -161,12 +161,52 @@ function getGeoCoordinates(city) {
     .then(function (data) {
       getWeatherForcast(data);
     })
-  return;
+    
+  // return;
 }
 
 cityFormEl.addEventListener('submit', function (e) {
   e.preventDefault();
+
   let city = cityInput.value.trim();
   getGeoCoordinates(city);
+  if (city) {
+    cityFormEl.reset();
+  }
+  return;
 }
 )
+//Save history to local storage
+function saveHistory(city) {
+  let history = localStorage.getItem('history') || [];
+  if (history.length > 0) {
+    history = JSON.parse(history);
+  }
+  if (history.includes(city)) return;
+
+  history.push(city);
+
+  if (history.length > 10) {
+    history.shift();
+  }
+
+  localStorage.setItem("history", JSON.stringify(history));
+  loadHistory();
+
+}
+// Create historical-serach button
+function loadHistory() {
+  // pastSeachEl.textContent = '';
+  let history = localStorage.getItem('history') || [];
+  if (history.length > 0) {
+    history = JSON.parse(history);
+  }
+
+  history.forEach(function (city) {
+    let searchBtn = document.createElement('button');
+    searchBtn.classList.add('historyBtns')
+    // searchBtn.setAttribute('class', 'btn btn-primary btn-lg my-1')
+    searchBtn.innerText = city;
+    pastSeachEl.append(searchBtn);
+  })
+}
