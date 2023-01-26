@@ -6,9 +6,15 @@ const APIKey = 'be7058c093e84628bb5922daf319347b';
 let storredCities = JSON.parse(localStorage.getItem('cities')) || [];
 const cityFormEl = document.querySelector('form');
 const cityInput = document.querySelector('#city-input');
+const searchBtn = document.querySelector("#search-btn");
+const clearBtn = document.querySelector('#clear-btn');
+const pastSeachEl = document.querySelector('#past-searched-cities');
+const currentWeatherEl = document.querySelector('.current-weather');
+const forecastEl = document.querySelector('#five-day-weather');
+const forecastCards = document.querySelectorAll('#five-day-weather-cards');
 
 function displayCurrentWeather(currentWeather) {
-  console.log(currentWeather);
+  // console.log(currentWeather);
  
   // console.log(dayjs().format('MM/DD/YYYY'));
   var iconUrl = `https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`;
@@ -19,12 +25,91 @@ function displayCurrentWeather(currentWeather) {
   // console.log(currentWeather.main.feels_like);
   // console.log(currentWeather.wind.speed);
   // console.log(currentWeather.main.humidity);
+const cityName = currentWeather.name;
+const date = dayjs((currentWeather.dt +currentWeather.timezone) * 1000).format('ddd MM/DD/YYYY hh:mm:ss a');
+const temp = currentWeather.main.temp;
+const tempFeelsLike = currentWeather.main.feels_like;
+const wind = currentWeather.wind.speed;
+const humidity = currentWeather.main.humidity;
+
+currentWeatherEl.innerHTML = `
+  <h4 class="my-2">${cityName} </h4>
+  <h5>${date}</h5> 
+  <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
+  <div>
+    <span> Temp: </span>
+    <span> ${temp}</span>
+    <span>&deg;F</span>
+  </div>
+  <div>
+    <span> Feels: </span>
+    <span>${tempFeelsLike}</span>
+    <span>&deg;F</span>
+  </div>
+  <div>
+    <span> Wind: </span>
+    <span>${wind}</span>
+    <span> MPH </span>
+  </div>
+  <div>
+    <span> Humidity: </span>  
+    <span>${humidity}</span>
+    <span> % </span>
+  </div>
+`
 
   console.log((dayjs((currentWeather.dt +currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
   
 }
+
+let days = 0;
 function displayWeatherForecast(forecast) {
   console.log(forecast);
+  for (let i = 0; i < forecast.list.length; i++) {
+  const cityName = forecast.city.name;
+  const date = dayjs(forecast.list[i].dt_txt).format('ddd MM/DD/YYYY hh:mm:ss a');
+  var iconUrl = `https://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`;
+  const temp = forecast.list[i].main.temp;
+  const tempFeelsLike = forecast.list[i].main.feels_like;
+  const wind = forecast.list[i].wind.speed;
+  const humidity = forecast.list[i].main.humidity;
+  
+  if (forecast.list[i].dt_txt.split(' ')[1]=='12:00:00') {
+    // let card = document.createElement(div);
+    // card.setAttribute('class','card col-2.m1 bg-primary text-white p-1 m-2');
+    
+    forecastCards[days].innerHTML += `
+    <h4 class="my-2">${cityName} </h4>
+    <h5>${date}</h5> 
+    <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
+    <div>
+      <span> Temp: </span>
+      <span> ${temp}</span>
+      <span>&deg;F</span>
+    </div>
+    <div>
+      <span> Feels: </span>
+      <span>${tempFeelsLike}</span>
+      <span>&deg;F</span>
+    </div>
+    <div>
+      <span> Wind: </span>
+      <span>${wind}</span>
+      <span> MPH </span>
+    </div>
+    <div>
+      <span> Humidity: </span>  
+      <span>${humidity}</span>
+      <span> % </span>
+    </div>
+  `
+  days++;
+}
+  }
+  
+  
+    // console.log((dayjs((currentWeather.dt +currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
+
 }
 
 //Create Variables for the API Call
