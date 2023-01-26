@@ -119,7 +119,7 @@ function getWeatherForcast(data) {
 
   // const base = '"http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;';
   // const query = `${id}?apikey=${key}`;
-  const requestUrl = "http://api.openweathermap.org/data/2.5/forecast?lon=" + data.longitude + "&lat=" + data.latitude + "&appid=" + APIKey + '&units=imperial';
+  const requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lon=" + data.longitude + "&lat=" + data.latitude + "&appid=" + APIKey + '&units=imperial';
 
   fetch(requestUrl)
     .then(function (response) {
