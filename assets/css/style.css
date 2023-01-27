@@ -34,7 +34,7 @@
   background: var(--cl-primary-opacity) !important;
 }
 
-#past-searched-cities {
-  display: flex;
-  flex-direction: row;
+#past-searched-cities , .past-search {
+  display: flex !important;
+  flex-direction: row !important;
 }

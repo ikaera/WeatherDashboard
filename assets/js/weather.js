@@ -198,7 +198,7 @@ function saveHistory(city) {
 }
 // Create historical-serach button
 function loadHistory() {
-  // pastSeachEl.textContent = '';
+  pastSeachEl.innerHTML = '';
   let history = localStorage.getItem('history') || [];
   if (history.length > 0) {
     history = JSON.parse(history);
@@ -206,14 +206,18 @@ function loadHistory() {
 
   history.forEach(function (city) {
     let searchBtn = document.createElement('button');
-    searchBtn.classList.add('historyBtns');
-    searchBtn.addEventListener('click', getGeoCoordinates(city));
+    // searchBtn.classList.add('historyBtns');
+    searchBtn.addEventListener('click', function () { 
+      getGeoCoordinates(city)});
     // searchBtn.onclick = 
     // searchBtn.setAttribute('class', 'btn btn-primary btn-lg my-1');
     searchBtn.innerHTML = city;
+    // pastSeachEl.setAttribute('class', 'past-search');
     pastSeachEl.append(searchBtn);
   })
 }
 
-
+clearBtn.addEventListener('click', function () {
+  localStorage.clear();  
+})
 // pastSeachEl.addEventListener('click', getGeoCoordinates)
