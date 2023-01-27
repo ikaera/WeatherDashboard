@@ -1,7 +1,5 @@
 'use strict';
-// var localizedFormat = require('dayjs/plugin/localizedFormat')
-// dayjs.extend(localizedFormat)
-
+// Create global variables
 const APIKey = 'be7058c093e84628bb5922daf319347b';
 let storredCities = JSON.parse(localStorage.getItem('cities')) || [];
 const cityFormEl = document.querySelector('form');
@@ -13,6 +11,7 @@ const currentWeatherEl = document.querySelector('.current-weather');
 const forecastEl = document.querySelector('#five-day-weather');
 const forecastCards = document.querySelectorAll('#five-day-weather-cards');
 
+//Create function to display current weatehr
 function displayCurrentWeather(currentWeather) {
   // console.log(currentWeather);
 
@@ -57,11 +56,10 @@ function displayCurrentWeather(currentWeather) {
     <span> % </span>
   </div>
 `
-// saveHistory();  
-// console.log((dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
-  return;
+    return;
 }
 
+//Build a function to display 5-day weather forecast.
 let days = 0;
 function displayWeatherForecast(forecast) {
   console.log(forecast);
@@ -109,10 +107,7 @@ function displayWeatherForecast(forecast) {
   days = 0;
 }
 
-//Create Variables for the API Call
-
 //Make the API Call Using Fetch
-
 //// Using the OpenWeatherMap API 'forecast', to retrieve 5-day foecast.
 
 function getWeatherForcast(data) {
@@ -162,21 +157,20 @@ function getGeoCoordinates(city) {
     .then(function (data) {
       getWeatherForcast(data);
     })
-    
+
   // return;
 }
-
+// Add  EventListener to city-search form
 cityFormEl.addEventListener('submit', function (e) {
   e.preventDefault();
-  if (cityInput.value !== "") {
   let city = cityInput.value.trim();
-   
-    getGeoCoordinates(city) 
-  
-  if (city) {
-    cityFormEl.reset();
+  if (city !== "") {
+    getGeoCoordinates(city)
+
+    if (city) {
+      cityFormEl.reset();
+    }
   }
-}
   return;
 }
 )
@@ -209,8 +203,9 @@ function loadHistory() {
   history.forEach(function (city) {
     let searchBtn = document.createElement('button');
     // searchBtn.classList.add('historyBtns');
-    searchBtn.addEventListener('click', function () { 
-      getGeoCoordinates(city)});
+    searchBtn.addEventListener('click', function () {
+      getGeoCoordinates(city)
+    });
     // searchBtn.onclick = 
     searchBtn.setAttribute('class', 'btn btn-secondary btn-lg mx-5 my-1');
     searchBtn.innerHTML = city;
@@ -222,6 +217,6 @@ function loadHistory() {
 clearBtn.addEventListener('click', function () {
 
   pastSeachEl.innerHTML = '';
-  localStorage.clear();  
+  localStorage.clear();
 })
 // pastSeachEl.addEventListener('click', getGeoCoordinates)

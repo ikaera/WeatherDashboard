@@ -11,7 +11,7 @@
   /* --gradient-primary: linear-gradient(to top left, #39b385, #9be15d);
   --gradient-secondary: linear-gradient(to top left, #ffcb03, #ffee03);   */
   --gradient-primary: linear-gradient(to top left, #393bb3, #5dd2e1);
-  --gradient-secondary: linear-gradient(to top left, #0329ffa8, #98f10a94);  
+  --gradient-secondary: linear-gradient(to top left, #0329ffa8, #98f10a94);
 }
 
 * {
@@ -27,16 +27,19 @@
 #main {
   background: var(--gradient-secondary);
 }
+
 #search-btn {
   width: 100%;
 }
+
 #five-day-weather-cards {
   background: var(--cl-primary-opacity) !important;
 }
 
-#past-searched-cities , .past-search {
+#past-searched-cities,
+.past-search {
   display: flex !important;
   flex-direction: row !important;
-  justify-content:center;  
+  justify-content: center;
   flex-wrap: wrap;
 }
