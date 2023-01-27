@@ -188,7 +188,7 @@ function saveHistory(city) {
 
   history.push(city);
 
-  if (history.length > 10) {
+  if (history.length > 4) {
     history.shift();
   }
 
