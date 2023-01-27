@@ -207,6 +207,7 @@ function loadHistory() {
   history.forEach(function (city) {
     let searchBtn = document.createElement('button');
     searchBtn.classList.add('historyBtns');
+    searchBtn.addEventListener('click', getGeoCoordinates(city));
     // searchBtn.onclick = 
     // searchBtn.setAttribute('class', 'btn btn-primary btn-lg my-1');
     searchBtn.innerHTML = city;
