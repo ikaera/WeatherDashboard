@@ -33,3 +33,8 @@
 #five-day-weather-cards {
   background: var(--cl-primary-opacity) !important;
 }
+
+#past-searched-cities {
+  display: flex;
+  flex-direction: row;
+}

@@ -57,8 +57,8 @@ function displayCurrentWeather(currentWeather) {
     <span> % </span>
   </div>
 `
-
-  // console.log((dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
+// saveHistory();  
+// console.log((dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('MM/DD/YYYY hh:mm:ss a')));
   return;
 }
 
@@ -133,6 +133,7 @@ function getWeatherForcast(data) {
 
 //Using the OpenWeatherMap API 'weather', to retrieve geographical coordinates given a city name.
 function getGeoCoordinates(city) {
+  saveHistory(city);
   const base = 'https://api.openweathermap.org/data/2.5/weather';
   const query = `?q=${city}&appid=${APIKey}&units=imperial`;
 
@@ -173,6 +174,7 @@ cityFormEl.addEventListener('submit', function (e) {
   if (city) {
     cityFormEl.reset();
   }
+  
   return;
 }
 )
@@ -204,9 +206,13 @@ function loadHistory() {
 
   history.forEach(function (city) {
     let searchBtn = document.createElement('button');
-    searchBtn.classList.add('historyBtns')
-    // searchBtn.setAttribute('class', 'btn btn-primary btn-lg my-1')
-    searchBtn.innerText = city;
+    searchBtn.classList.add('historyBtns');
+    // searchBtn.onclick = 
+    // searchBtn.setAttribute('class', 'btn btn-primary btn-lg my-1');
+    searchBtn.innerHTML = city;
     pastSeachEl.append(searchBtn);
   })
 }
+
+
+// pastSeachEl.addEventListener('click', getGeoCoordinates)
