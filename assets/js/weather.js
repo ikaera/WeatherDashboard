@@ -168,13 +168,15 @@ function getGeoCoordinates(city) {
 
 cityFormEl.addEventListener('submit', function (e) {
   e.preventDefault();
-
+  if (cityInput.value !== "") {
   let city = cityInput.value.trim();
-  getGeoCoordinates(city);
+   
+    getGeoCoordinates(city) 
+  
   if (city) {
     cityFormEl.reset();
   }
-  
+}
   return;
 }
 )
@@ -210,7 +212,7 @@ function loadHistory() {
     searchBtn.addEventListener('click', function () { 
       getGeoCoordinates(city)});
     // searchBtn.onclick = 
-    // searchBtn.setAttribute('class', 'btn btn-primary btn-lg my-1');
+    searchBtn.setAttribute('class', 'btn btn-secondary btn-lg mx-5 my-1');
     searchBtn.innerHTML = city;
     // pastSeachEl.setAttribute('class', 'past-search');
     pastSeachEl.append(searchBtn);
