@@ -56,7 +56,7 @@ function displayCurrentWeather(currentWeather) {
     <span> % </span>
   </div>
 `
-    return;
+  return;
 }
 
 //Build a function to display 5-day weather forecast.
