@@ -218,6 +218,8 @@ function loadHistory() {
 }
 
 clearBtn.addEventListener('click', function () {
+
+  pastSeachEl.innerHTML = '';
   localStorage.clear();  
 })
 // pastSeachEl.addEventListener('click', getGeoCoordinates)
