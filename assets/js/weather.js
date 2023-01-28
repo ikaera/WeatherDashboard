@@ -18,12 +18,6 @@ function displayCurrentWeather(currentWeather) {
   // console.log(dayjs().format('MM/DD/YYYY'));
   var iconUrl = `https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`;
 
-  // console.log(currentWeather.dt);
-  // console.log(iconUrl);
-  // console.log(currentWeather.main.temp);
-  // console.log(currentWeather.main.feels_like);
-  // console.log(currentWeather.wind.speed);
-  // console.log(currentWeather.main.humidity);
   const cityName = currentWeather.name;
   const date = dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('ddd MM/DD/YYYY hh:mm:ss a');
   const temp = currentWeather.main.temp;
@@ -111,7 +105,6 @@ function displayWeatherForecast(forecast) {
 //// Using the OpenWeatherMap API 'forecast', to retrieve 5-day foecast.
 
 function getWeatherForcast(data) {
-
   // const base = '"http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;';
   // const query = `${id}?apikey=${key}`;
   const requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lon=" + data.longitude + "&lat=" + data.latitude + "&appid=" + APIKey + '&units=imperial';
@@ -123,7 +116,6 @@ function getWeatherForcast(data) {
     .then(function (data) {
       displayWeatherForecast(data);
     })
-
 };
 
 //Using the OpenWeatherMap API 'weather', to retrieve geographical coordinates given a city name.
@@ -157,9 +149,39 @@ function getGeoCoordinates(city) {
     .then(function (data) {
       getWeatherForcast(data);
     })
-
   // return;
 }
+//add onload event to the window object. 
+window.onload = function () {
+  // e.preventDefault();
+  //find current location coords using navigator.geolocation.getCurrentPosition().
+  if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(function (myPosition) {
+      const lat = myPosition.coords.latitude;
+      const lon = myPosition.coords.longitude;
+      console.log(lat, lon);
+      getCurrentLocationWeather();
+      function getCurrentLocationWeather() {
+        const requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&&appid=${APIKey}&units=imperial`;
+
+        fetch(requestUrl)
+          .then(function (response) {
+            if (response.status <= 299 && response.status >= 200) {
+              return response.json();
+            } else {
+              throw Error(response.statusText);
+            }
+          })
+          .then(function (data) {
+            displayCurrentWeather(data);
+          })
+        // .then(function (data) {
+        //   getWeatherForcast(data);
+        // })
+      };
+    })
+}
+
 // Add  EventListener to city-search form
 cityFormEl.addEventListener('submit', function (e) {
   e.preventDefault();
