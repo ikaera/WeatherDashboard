@@ -1,4 +1,4 @@
-# Mod6-Server-Side-APIs-Challenge-WeatherDashboard
+# WeatherDashboard-Server-Side-API
 
 ## Description
 
