@@ -50,9 +50,8 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
 
 ### Links: 
 
-https://ikaera.github.io/Mod6-Server-Side-APIs-Challenge-WeatherDashboard/
-
-https://github.com/ikaera/Mod6-Server-Side-APIs-Challenge-WeatherDashboard
+- [Live App](https://ikaera.github.io/WeatherDashboard/)
+- [GitHub Repository](https://github.com/ikaera/WeatherDashboard)
 
 
 <!--     
