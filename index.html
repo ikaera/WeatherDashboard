@@ -56,7 +56,16 @@
 
     <section class="column col-sm-6 col-md-8 col-lg-9 col-xl-9 col-xxl-10 ">
       <div class="error-message" id="error-message"></div>
+      <div class="d-flex gap-2 mb-3">
+        <button class="btn btn-info btn-sm" id="compare-btn" title="Compare with other cities">
+          📊 Compare Cities
+        </button>
+        <button class="btn btn-outline-info btn-sm" id="clear-compare-btn" title="Clear comparison" style="display: none;">
+          ✕ Clear Comparison
+        </button>
+      </div>
       <div id="weather-alerts" class="mb-3"></div>
+      <div id="comparison-view" class="mb-5"></div>
       <div class="row p-1 current-weather border-top border-secondary m-2 shadow p-3 mb-5 bg-body-tertiary rounded">
         <h3>Current weather</h3>
         <div class="placeholder-content" id="weather-placeholder">

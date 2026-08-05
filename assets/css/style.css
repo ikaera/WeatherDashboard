@@ -254,3 +254,57 @@ html[data-theme="light"] {
   opacity: 0.9;
 }
 
+/* Comparison View */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.comparison-card {
+  background: var(--cl-primary-opacity) !important;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.comparison-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.comparison-city-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.comparison-remove-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.comparison-remove-btn:hover {
+  background: rgba(220, 53, 69, 0.6);
+}
+
+.comparison-data {
+  font-size: 0.9rem;
+}
+
+.comparison-temp {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+

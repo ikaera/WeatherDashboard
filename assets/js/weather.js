@@ -1,6 +1,7 @@
 import { getTemperatureUnit, setTemperatureUnit, formatTemperature, getTemperatureSymbol, calculateDewPoint, getWindDirection, formatPressure, getFavoriteCities, addFavoriteCity, removeFavoriteCity, isFavoriteCity } from './weatherUtils.js';
 import { getWeatherAlerts } from './weatherAlerts.js';
 import { toggleTheme, getSavedTheme } from './themeManager.js';
+import { getComparisonCities, addCityToComparison, removeCityFromComparison, isInComparison } from './comparisonManager.js';
 
 let APIKey = '';
 let REFRESH_INTERVAL = 15 * 60 * 1000;
@@ -20,6 +21,9 @@ const forecastEl = document.querySelector('#five-day-weather');
 const hourlyEl = document.querySelector('#hourly-weather');
 const errorMessageEl = document.querySelector('#error-message');
 const alertsEl = document.querySelector('#weather-alerts');
+const comparisonViewEl = document.querySelector('#comparison-view');
+const compareBtn = document.querySelector('#compare-btn');
+const clearCompareBtn = document.querySelector('#clear-compare-btn');
 const tempUnitToggle = document.querySelectorAll('input[name="tempUnit"]');
 const favoriteCitiesEl = document.querySelector('#favorite-cities');
 const noFavoritesEl = document.querySelector('#no-favorites');
@@ -196,6 +200,91 @@ function showLoading() {
 function hideLoading() {
   weatherPlaceholder.style.display = 'none';
   currentWeatherEl.style.display = 'block';
+}
+
+// Display comparison view
+function displayComparisonView() {
+  const cities = getComparisonCities();
+  comparisonViewEl.innerHTML = '';
+
+  if (cities.length === 0) {
+    clearCompareBtn.style.display = 'none';
+    return;
+  }
+
+  clearCompareBtn.style.display = 'inline-block';
+
+  const tempUnit = getTemperatureUnit();
+  const tempSymbol = getTemperatureSymbol(tempUnit);
+
+  const grid = document.createElement('div');
+  grid.className = 'comparison-grid border-bottom border-secondary shadow p-3 mb-3 bg-body-tertiary rounded';
+
+  cities.forEach(city => {
+    const temp = formatTemperature(city.temp, tempUnit);
+    const feelsLike = formatTemperature(city.feelsLike, tempUnit);
+    const iconUrl = `https://openweathermap.org/img/w/${city.icon}.png`;
+
+    const card = document.createElement('div');
+    card.className = 'comparison-card';
+    card.innerHTML = `
+      <div class="comparison-card-header">
+        <div>
+          <div class="comparison-city-name">${city.name}</div>
+          <div style="font-size: 0.85rem;">${city.country || ''}</div>
+        </div>
+        <button class="comparison-remove-btn" data-city="${city.name}">✕</button>
+      </div>
+      <div style="text-align: center;">
+        <img src="${iconUrl}" alt="${city.weatherMain}" style="width: 40px; height: 40px;">
+        <div>${city.weatherMain}</div>
+      </div>
+      <div class="comparison-temp">${temp}${tempSymbol}</div>
+      <div class="comparison-data">Feels: ${feelsLike}${tempSymbol}</div>
+      <div class="comparison-data">Humidity: ${city.humidity}%</div>
+      <div class="comparison-data">Wind: ${Math.round(city.windSpeed)} MPH</div>
+    `;
+
+    const removeBtn = card.querySelector('.comparison-remove-btn');
+    removeBtn.addEventListener('click', () => {
+      removeCityFromComparison(city.name);
+      displayComparisonView();
+    });
+
+    grid.appendChild(card);
+  });
+
+  comparisonViewEl.appendChild(grid);
+}
+
+// Add city to comparison
+function addToComparison() {
+  if (!currentWeatherData) {
+    showError('Please search for a city first');
+    return;
+  }
+
+  try {
+    const added = addCityToComparison(currentWeatherData);
+    if (added) {
+      showSuccess(`${currentWeatherData.name} added to comparison`);
+      displayComparisonView();
+    } else {
+      showError(`${currentWeatherData.name} is already in comparison`);
+    }
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+function showSuccess(message) {
+  errorMessageEl.innerHTML = `<strong>✓ Success:</strong> ${message}`;
+  errorMessageEl.classList.add('show');
+  errorMessageEl.style.backgroundColor = '#28a745';
+  setTimeout(() => {
+    errorMessageEl.classList.remove('show');
+    errorMessageEl.style.backgroundColor = '#dc3545';
+  }, 3000);
 }
 
 // Display weather alerts
@@ -399,6 +488,7 @@ window.onload = function () {
   initializeThemeIcon();
   loadFavoriteCities();
   loadHistory();
+  displayComparisonView();
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -520,6 +610,18 @@ function updateThemeIcon(theme) {
 function initializeThemeIcon() {
   const currentTheme = getSavedTheme();
   updateThemeIcon(currentTheme);
+}
+
+// Compare button event listener
+if (compareBtn) {
+  compareBtn.addEventListener('click', addToComparison);
+}
+
+if (clearCompareBtn) {
+  clearCompareBtn.addEventListener('click', () => {
+    localStorage.removeItem('citiesComparison');
+    displayComparisonView();
+  });
 }
 
 export function initializeApp(apiKey, refreshInterval) {
