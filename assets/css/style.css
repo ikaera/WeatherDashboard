@@ -188,6 +188,51 @@ html[data-theme="light"] {
   font-weight: 500;
 }
 
+/* Hourly card details */
+.hourly-card .card-feels,
+.hourly-card .card-humidity,
+.hourly-card .card-wind,
+.hourly-card .card-rain,
+.hourly-card .card-visibility,
+.forecast-card .card-feels,
+.forecast-card .card-humidity,
+.forecast-card .card-wind,
+.forecast-card .card-rain,
+.forecast-card .card-visibility,
+.forecast-card .card-details,
+.forecast-card .card-pressure {
+  font-size: 0.8rem;
+  margin: 2px 0;
+  line-height: 1.2;
+}
+
+.hourly-card .card-feels,
+.forecast-card .card-feels {
+  color: #ffeb3b;
+  font-weight: 500;
+}
+
+.hourly-card .card-humidity,
+.hourly-card .card-wind,
+.hourly-card .card-visibility,
+.forecast-card .card-humidity,
+.forecast-card .card-wind,
+.forecast-card .card-visibility,
+.forecast-card .card-details {
+  color: #b3e5fc;
+}
+
+.hourly-card .card-rain,
+.forecast-card .card-rain {
+  color: #81c784;
+  font-weight: 500;
+}
+
+.forecast-card .card-pressure {
+  color: #ffb3ba;
+  margin-top: 4px;
+}
+
 #past-searched-cities,
 .past-search {
   display: flex !important;

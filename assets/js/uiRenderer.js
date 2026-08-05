@@ -98,17 +98,25 @@ function renderHourlyForecast(forecast) {
   hourlyEl.innerHTML = '';
   hourlyData.forEach(hour => {
     const temp = formatTemperature(hour.main.temp, tempUnit);
+    const feelsLike = formatTemperature(hour.main.feels_like, tempUnit);
     const date = dayjs(hour.dt * 1000).format('ddd hh:mm a');
     const iconUrl = `https://openweathermap.org/img/w/${hour.weather[0].icon}.png`;
-    const wind = hour.wind.speed;
+    const wind = Math.round(hour.wind.speed);
+    const humidity = hour.main.humidity;
+    const rainChance = hour.pop ? Math.round(hour.pop * 100) : 0;
+    const visibility = (hour.visibility / 1000).toFixed(1);
 
     const hourCard = document.createElement('div');
     hourCard.className = 'weather-card hourly-card';
     hourCard.innerHTML = `
       <p class="card-time">${date}</p>
       <img src="${iconUrl}" alt="icon" class="weather-icon">
-      <p class="card-temp">${temp}${tempSymbol}</p>
-      <p class="card-wind">🌬️ ${wind} MPH</p>
+      <p class="card-temp"><strong>${temp}${tempSymbol}</strong></p>
+      <p class="card-feels">Feels: ${feelsLike}${tempSymbol}</p>
+      <p class="card-humidity">💧 ${humidity}%</p>
+      <p class="card-wind">🌬️ ${wind} mph</p>
+      ${rainChance > 0 ? `<p class="card-rain">🌧️ ${rainChance}%</p>` : ''}
+      <p class="card-visibility">👁️ ${visibility}km</p>
     `;
     hourlyEl.appendChild(hourCard);
   });
@@ -129,9 +137,14 @@ function renderFiveDayForecast(forecast) {
   forecastEl.innerHTML = '';
   Object.values(dailyData).slice(0, 5).forEach(day => {
     const temp = formatTemperature(day.main.temp, tempUnit);
+    const feelsLike = formatTemperature(day.main.feels_like, tempUnit);
     const date = dayjs(day.dt * 1000).format('ddd MM/DD');
     const iconUrl = `https://openweathermap.org/img/w/${day.weather[0].icon}.png`;
     const description = day.weather[0].main;
+    const humidity = day.main.humidity;
+    const wind = Math.round(day.wind.speed);
+    const rainChance = day.pop ? Math.round(day.pop * 100) : 0;
+    const pressure = day.main.pressure;
 
     const card = document.createElement('div');
     card.className = 'weather-card forecast-card';
@@ -139,7 +152,11 @@ function renderFiveDayForecast(forecast) {
       <p class="card-date">${date}</p>
       <img src="${iconUrl}" alt="icon" class="weather-icon">
       <p class="card-weather">${description}</p>
-      <p class="card-temp">${temp}${tempSymbol}</p>
+      <p class="card-temp"><strong>${temp}${tempSymbol}</strong></p>
+      <p class="card-feels">Feels: ${feelsLike}${tempSymbol}</p>
+      <p class="card-details">💧 ${humidity}% | 🌬️ ${wind} mph</p>
+      ${rainChance > 0 ? `<p class="card-rain">🌧️ ${rainChance}%</p>` : ''}
+      <p class="card-pressure">📊 ${pressure}mb</p>
     `;
     forecastEl.appendChild(card);
   });
