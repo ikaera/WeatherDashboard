@@ -1,0 +1,40 @@
+# Handle line endings automatically for all text files
+* text=auto
+
+# Source code
+*.js text eol=lf
+*.ts text eol=lf
+*.jsx text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Documentation
+*.md text eol=lf diff=markdown
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.zip binary
+*.gz binary
+*.tar binary
+
+# Windows batch files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.exe binary
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
