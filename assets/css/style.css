@@ -63,71 +63,120 @@ html[data-theme="light"] {
 
 .hourly-card {
   background: var(--cl-primary-opacity) !important;
-  min-width: 100px;
-  max-width: 100px;
+  min-width: 110px;
+  max-width: 110px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 12px;
+  padding: 14px 10px;
   border-radius: 8px;
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
   flex-shrink: 0;
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 500;
 }
 
 .hourly-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-.hourly-card-time {
-  font-size: 0.8rem;
+.hourly-card p {
+  margin: 3px 0;
+  line-height: 1.2;
+}
+
+.hourly-card .card-time {
+  font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+  display: block;
 }
 
-.hourly-card-icon {
-  font-size: 1.5rem;
-  margin: 5px 0;
+.hourly-card .weather-icon {
+  font-size: 2rem;
+  margin: 6px 0;
+  display: block;
 }
 
-.hourly-card-temp {
-  font-size: 0.9rem;
-  font-weight: 500;
+.hourly-card .card-temp {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+}
+
+.hourly-card .card-wind {
+  font-size: 0.8rem;
+  margin-top: 2px;
+  display: block;
 }
 
 .forecast-card {
   background: var(--cl-primary-opacity) !important;
-  min-height: 300px;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 16px 12px;
   transition: transform 0.2s, box-shadow 0.2s;
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  text-align: center;
 }
 
 .forecast-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .forecast-card h4 {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .forecast-card h5 {
-  font-size: 0.85rem;
-  margin-bottom: 0.75rem;
-  opacity: 0.9;
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem 0;
+  opacity: 1;
+  font-weight: 500;
 }
 
-.forecast-card img {
-  width: 60px;
-  height: auto;
-  margin: 0.5rem 0;
+.forecast-card .card-date {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.forecast-card .weather-icon {
+  width: 70px;
+  height: 70px;
+  margin: 8px 0;
+  display: block;
+}
+
+.forecast-card .card-weather {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 6px 0;
+  display: block;
+  color: #ffd700;
+}
+
+.forecast-card .card-temp {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 8px;
+  display: block;
 }
 
 .forecast-card > div {
@@ -408,12 +457,28 @@ html[data-theme="light"] {
 
 /* Forecast cards text */
 .weather-card {
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .weather-card p,
 .weather-card div {
-  color: var(--text-primary);
+  color: #ffffff;
+}
+
+[data-theme="light"] .hourly-card,
+[data-theme="light"] .forecast-card {
+  background: rgba(94, 197, 118, 0.85) !important;
+  color: #ffffff;
+}
+
+[data-theme="light"] .hourly-card:hover,
+[data-theme="light"] .forecast-card:hover {
+  background: rgba(94, 197, 118, 0.95) !important;
+}
+
+[data-theme="light"] .forecast-card .card-weather {
+  color: #ffeb3b;
+  font-weight: 600;
 }
 
 [data-theme="dark"] .weather-card {
