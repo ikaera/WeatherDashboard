@@ -43,11 +43,13 @@
     </section>
 
     <section class="column col-sm-6 col-md-8 col-lg-9 col-xl-9 col-xxl-10 ">
+      <div class="error-message" id="error-message"></div>
       <div class="row p-1 current-weather border-top border-secondary m-2 shadow p-3 mb-5 bg-body-tertiary rounded">
         <h3>Current weather</h3>
-        <p></p>
-        <p></p>
-        <p></p>
+        <div class="placeholder-content" id="weather-placeholder">
+          <p>🔍 Search for a city to see current weather</p>
+        </div>
+        <div id="weather-content" style="display: none;"></div>
       </div>
       <section class="border-bottom border-secondary five-day-weather shadow p-3 mb-5 bg-body-tertiary rounded">
         <div class="row mb-3">

@@ -13,8 +13,10 @@ const cityInput = document.querySelector('#city-input');
 const searchBtn = document.querySelector("#search-btn");
 const clearBtn = document.querySelector('#clear-btn');
 const pastSeachEl = document.querySelector('#past-searched-cities');
-const currentWeatherEl = document.querySelector('.current-weather');
+const currentWeatherEl = document.querySelector('#weather-content');
+const weatherPlaceholder = document.querySelector('#weather-placeholder');
 const forecastEl = document.querySelector('#five-day-weather');
+const errorMessageEl = document.querySelector('#error-message');
 const tempUnitToggle = document.querySelectorAll('input[name="tempUnit"]');
 
 //Create function to display current weather
@@ -117,41 +119,71 @@ function displayWeatherForecast(forecast) {
   }
 }
 
+// Error handling functions
+function showError(message) {
+  errorMessageEl.innerHTML = `<strong>⚠️ Error:</strong> ${message}`;
+  errorMessageEl.classList.add('show');
+}
+
+function hideError() {
+  errorMessageEl.classList.remove('show');
+}
+
+function showLoading() {
+  currentWeatherEl.style.display = 'none';
+  weatherPlaceholder.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading weather data...</p></div>';
+  weatherPlaceholder.style.display = 'block';
+}
+
+function hideLoading() {
+  weatherPlaceholder.style.display = 'none';
+  currentWeatherEl.style.display = 'block';
+}
+
 //Make the API Call Using Fetch
 //// Using the OpenWeatherMap API 'forecast', to retrieve 5-day foecast.
 
 function getWeatherForcast(data) {
-  // const base = '"http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;';
-  // const query = `${id}?apikey=${key}`;
   const requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lon=" + data.longitude + "&lat=" + data.latitude + "&appid=" + APIKey + '&units=imperial';
 
   fetch(requestUrl)
     .then(function (response) {
+      if (!response.ok) {
+        throw new Error('Failed to fetch forecast data');
+      }
       return response.json()
     })
     .then(function (data) {
+      hideLoading();
+      hideError();
       displayWeatherForecast(data);
     })
+    .catch(function (error) {
+      showError('Could not load 5-day forecast. ' + error.message);
+      console.error('Forecast error:', error);
+    });
 };
 
 //Using the OpenWeatherMap API 'weather', to retrieve geographical coordinates given a city name.
 function getGeoCoordinates(city) {
+  showLoading();
   saveHistory(city);
   const base = 'https://api.openweathermap.org/data/2.5/weather';
   const query = `?q=${city}&appid=${APIKey}&units=imperial`;
-
   const requestUrl = base + query;
 
   fetch(requestUrl)
     .then(function (response) {
-      if (response.status <= 299 && response.status >= 200) {
-        return response.json();
-      } else {
-        throw Error(response.statusText);
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error(`City "${city}" not found. Please try another city.`);
+        } else {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
       }
+      return response.json();
     })
     .then(function (data) {
-      console.log(data);
       let cityInformation = {
         cityName: data.name,
         longitude: data.coord.lon,
@@ -165,7 +197,13 @@ function getGeoCoordinates(city) {
     .then(function (data) {
       getWeatherForcast(data);
     })
-  // return;
+    .catch(function (error) {
+      hideLoading();
+      weatherPlaceholder.innerHTML = '<div class="placeholder-content">❌ Unable to load weather data</div>';
+      weatherPlaceholder.style.display = 'block';
+      showError(error.message);
+      console.error('Geocoding error:', error);
+    });
 }
 //Add event listeners for temperature unit toggle
 tempUnitToggle.forEach(toggle => {
@@ -189,35 +227,41 @@ if (toggleInput) {
   toggleInput.checked = true;
 }
 
-//add onload event to the window object. 
+//add onload event to the window object.
 window.onload = function () {
-  // e.preventDefault();
-  //find current location coords using navigator.geolocation.getCurrentPosition().
-  if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(function (myPosition) {
-      const lat = myPosition.coords.latitude;
-      const lon = myPosition.coords.longitude;
-      console.log(lat, lon);
-      getCurrentLocationWeather();
-      function getCurrentLocationWeather() {
-        const requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&&appid=${APIKey}&units=imperial`;
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (myPosition) {
+        const lat = myPosition.coords.latitude;
+        const lon = myPosition.coords.longitude;
+        getCurrentLocationWeather();
+        function getCurrentLocationWeather() {
+          const requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&&appid=${APIKey}&units=imperial`;
 
-        fetch(requestUrl)
-          .then(function (response) {
-            if (response.status <= 299 && response.status >= 200) {
+          fetch(requestUrl)
+            .then(function (response) {
+              if (!response.ok) {
+                throw new Error('Failed to get weather for current location');
+              }
               return response.json();
-            } else {
-              throw Error(response.statusText);
-            }
-          })
-          .then(function (data) {
-            displayCurrentWeather(data);
-          })
-        // .then(function (data) {
-        //   getWeatherForcast(data);
-        // })
-      };
-    })
+            })
+            .then(function (data) {
+              hideLoading();
+              hideError();
+              displayCurrentWeather(data);
+            })
+            .catch(function (error) {
+              console.error('Geolocation weather error:', error);
+            });
+        }
+      },
+      function (error) {
+        console.log('Geolocation permission denied or unavailable:', error.message);
+      }
+    );
+  } else {
+    console.log('Geolocation not supported');
+  }
 }
 
 // Add  EventListener to city-search form
