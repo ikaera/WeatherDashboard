@@ -308,3 +308,52 @@ html[data-theme="light"] {
   font-weight: 600;
 }
 
+/* Favorite Buttons and Cities */
+#favorite-btn,
+#favorite-cities .btn {
+  background-color: #ffd700;
+  border-color: #ffa500;
+  color: #000 !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+#favorite-btn:hover,
+#favorite-cities .btn:hover {
+  background-color: #ffa500;
+  border-color: #ff8c00;
+  color: #000 !important;
+  transform: scale(1.05);
+}
+
+[data-theme="dark"] #favorite-btn,
+[data-theme="dark"] #favorite-cities .btn {
+  background-color: #ffd700;
+  border-color: #ffa500;
+  color: #000 !important;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+[data-theme="dark"] #favorite-btn:hover,
+[data-theme="dark"] #favorite-cities .btn:hover {
+  background-color: #ffa500;
+  border-color: #ff8c00;
+  color: #000 !important;
+  box-shadow: 0 0 12px rgba(255, 165, 0, 0.5);
+}
+
+/* Favorite section label */
+#favorite-cities h5 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+[data-theme="dark"] #favorite-cities h5 {
+  color: #ffd700;
+}
+
+#no-favorites {
+  color: var(--text-secondary);
+}
+
