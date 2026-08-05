@@ -1,0 +1,16 @@
+{
+  "name": "weather-dashboard",
+  "version": "1.0.0",
+  "description": "Modern weather dashboard with real-time forecasts",
+  "main": "assets/js/weather.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "keywords": ["weather", "dashboard", "openweathermap"],
+  "author": "Irakli Eradze",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
