@@ -30,30 +30,43 @@ function displayCurrentWeather(currentWeather) {
   const wind = currentWeather.wind.speed;
   const humidity = currentWeather.main.humidity;
   const tempSymbol = weatherUtils.getTemperatureSymbol ? weatherUtils.getTemperatureSymbol(tempUnit) : '°F';
+  const windDir = weatherUtils.getWindDirection ? weatherUtils.getWindDirection(currentWeather.wind.deg) : '';
+  const pressure = weatherUtils.formatPressure ? weatherUtils.formatPressure(currentWeather.main.pressure) : {};
+  const dewPoint = weatherUtils.calculateDewPoint ? weatherUtils.calculateDewPoint(currentWeather.main.temp, humidity) : 'N/A';
+  const visibility = (currentWeather.visibility / 1000).toFixed(1);
+  const sunrise = dayjs((currentWeather.sys.sunrise + currentWeather.timezone) * 1000).format('hh:mm a');
+  const sunset = dayjs((currentWeather.sys.sunset + currentWeather.timezone) * 1000).format('hh:mm a');
+  const weatherDesc = currentWeather.weather[0].main;
 
   currentWeatherEl.innerHTML = `
-  <h4 class="my-2">${cityName} </h4>
+  <h4 class="my-2">${cityName} <small>${weatherDesc}</small></h4>
   <h5>${date}</h5>
   <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
-  <div>
-    <span> Temp: </span>
-    <span> ${temp}</span>
-    <span>${tempSymbol}</span>
+  <div class="row">
+    <div class="col-md-6">
+      <div><strong>Temperature</strong></div>
+      <div>Temp: ${temp}${tempSymbol}</div>
+      <div>Feels: ${tempFeelsLike}${tempSymbol}</div>
+      <div>Dew Point: ${dewPoint}${tempSymbol}</div>
+    </div>
+    <div class="col-md-6">
+      <div><strong>Atmospheric</strong></div>
+      <div>Pressure: ${pressure.mb}mb (${pressure.inHg}inHg)</div>
+      <div>Humidity: ${humidity}%</div>
+      <div>Visibility: ${visibility}km</div>
+    </div>
   </div>
-  <div>
-    <span> Feels: </span>
-    <span>${tempFeelsLike}</span>
-    <span>${tempSymbol}</span>
-  </div>
-  <div>
-    <span> Wind: </span>
-    <span>${wind}</span>
-    <span> MPH </span>
-  </div>
-  <div>
-    <span> Humidity: </span>
-    <span>${humidity}</span>
-    <span> % </span>
+  <div class="row mt-2">
+    <div class="col-md-6">
+      <div><strong>Wind</strong></div>
+      <div>Speed: ${wind} MPH</div>
+      <div>Direction: ${windDir} (${currentWeather.wind.deg}°)</div>
+    </div>
+    <div class="col-md-6">
+      <div><strong>Sun Times</strong></div>
+      <div>Sunrise: ${sunrise}</div>
+      <div>Sunset: ${sunset}</div>
+    </div>
   </div>
 `
   return;

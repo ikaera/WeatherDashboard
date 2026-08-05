@@ -32,6 +32,26 @@ function getTemperatureSymbol(unit) {
   return unit === 'F' ? '°F' : '°C';
 }
 
+function calculateDewPoint(temp, humidity) {
+  // Magnus formula for dew point calculation
+  const a = 17.27;
+  const b = 237.7;
+  const alpha = ((a * temp) / (b + temp)) + Math.log(humidity / 100);
+  const dewPoint = (b * alpha) / (a - alpha);
+  return Math.round(dewPoint * 10) / 10;
+}
+
+function getWindDirection(degrees) {
+  const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+  const index = Math.round(((degrees % 360) / 22.5));
+  return directions[index % 16];
+}
+
+function formatPressure(pressureMb) {
+  const pressureIn = (pressureMb / 33.86).toFixed(2);
+  return { mb: pressureMb, inHg: pressureIn };
+}
+
 // Export for both Node.js and browser
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -40,6 +60,9 @@ if (typeof module !== 'undefined' && module.exports) {
     convertTemperature,
     formatTemperature,
     getTemperatureSymbol,
+    calculateDewPoint,
+    getWindDirection,
+    formatPressure,
     TEMP_UNIT_KEY,
   };
 }
@@ -52,6 +75,9 @@ if (typeof window !== 'undefined') {
     convertTemperature,
     formatTemperature,
     getTemperatureSymbol,
+    calculateDewPoint,
+    getWindDirection,
+    formatPressure,
     TEMP_UNIT_KEY,
   };
 }

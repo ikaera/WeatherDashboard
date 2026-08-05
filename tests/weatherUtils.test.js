@@ -69,4 +69,49 @@ describe('Temperature Utilities', () => {
       expect(weatherUtils.convertTemperature(20, 'F')).toBe(68);
     });
   });
+
+  describe('calculateDewPoint', () => {
+    it('calculates dew point correctly', () => {
+      // At 20°C with 50% humidity, dew point is approximately 9.3°C
+      const dewPoint = weatherUtils.calculateDewPoint(20, 50);
+      expect(dewPoint).toBeGreaterThan(8);
+      expect(dewPoint).toBeLessThan(11);
+    });
+
+    it('returns higher dew point with higher humidity', () => {
+      const dewPoint50 = weatherUtils.calculateDewPoint(20, 50);
+      const dewPoint80 = weatherUtils.calculateDewPoint(20, 80);
+      expect(dewPoint80).toBeGreaterThan(dewPoint50);
+    });
+  });
+
+  describe('getWindDirection', () => {
+    it('returns N for 0 degrees', () => {
+      expect(weatherUtils.getWindDirection(0)).toBe('N');
+    });
+
+    it('returns E for 90 degrees', () => {
+      expect(weatherUtils.getWindDirection(90)).toBe('E');
+    });
+
+    it('returns S for 180 degrees', () => {
+      expect(weatherUtils.getWindDirection(180)).toBe('S');
+    });
+
+    it('returns W for 270 degrees', () => {
+      expect(weatherUtils.getWindDirection(270)).toBe('W');
+    });
+
+    it('returns NE for 45 degrees', () => {
+      expect(weatherUtils.getWindDirection(45)).toBe('NE');
+    });
+  });
+
+  describe('formatPressure', () => {
+    it('converts pressure in mb to inHg', () => {
+      const pressure = weatherUtils.formatPressure(1013.25);
+      expect(pressure.mb).toBe(1013.25);
+      expect(parseFloat(pressure.inHg)).toBeCloseTo(29.92, 1);
+    });
+  });
 });
