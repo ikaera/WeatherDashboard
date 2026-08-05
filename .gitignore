@@ -85,3 +85,6 @@ temp/
 .ruby-version
 .nvmrc
 .tool-versions
+
+# Development documentation (for AI assistants)
+CLAUDE.md
