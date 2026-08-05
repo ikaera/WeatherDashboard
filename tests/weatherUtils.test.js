@@ -1,3 +1,5 @@
+'use strict';
+
 const weatherUtils = require('../assets/js/weatherUtils');
 
 describe('Temperature Utilities', () => {

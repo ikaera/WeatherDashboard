@@ -1,3 +1,5 @@
+'use strict';
+
 const CACHE_VERSION = 'weather-dashboard-v1';
 const STATIC_ASSETS = [
   '/',

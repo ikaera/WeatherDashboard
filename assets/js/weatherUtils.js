@@ -1,5 +1,3 @@
-'use strict';
-
 const TEMP_UNIT_KEY = 'tempUnit';
 
 function getTemperatureUnit() {
@@ -89,25 +87,7 @@ function isFavoriteCity(cityName) {
   return favorites.some(c => c.toLowerCase() === normalizedName);
 }
 
-// ES6 Export for browser modules (primary)
-export {
-  getTemperatureUnit,
-  setTemperatureUnit,
-  convertTemperature,
-  formatTemperature,
-  getTemperatureSymbol,
-  calculateDewPoint,
-  getWindDirection,
-  formatPressure,
-  getFavoriteCities,
-  addFavoriteCity,
-  removeFavoriteCity,
-  isFavoriteCity,
-  TEMP_UNIT_KEY,
-  FAVORITES_KEY,
-};
-
-// CommonJS exports for Node.js/Jest (fallback for testing)
+// Exports for Node.js/Jest and browser compatibility
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     getTemperatureUnit,
