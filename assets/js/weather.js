@@ -1,11 +1,12 @@
 import { getTemperatureUnit, setTemperatureUnit } from './weatherUtils.js';
 import { toggleTheme, getSavedTheme } from './themeManager.js';
 import { setAPIKey, fetchWeatherByCity, fetchWeatherByGeolocation, fetchWeatherByCoordinates, saveCityCoordinates } from './apiClient.js';
-import { showError, hideError, showLoading, hideLoading, showPlaceholder } from './uiState.js';
+import { showError, hideError, showLoading, hideLoading, showPlaceholder, showSuccess } from './uiState.js';
 import { renderCurrentWeather, renderHourlyForecast, renderFiveDayForecast, renderAlerts, renderComparisonView } from './uiRenderer.js';
 import { saveHistory, loadHistory } from './historyManager.js';
 import { renderFavoriteCities, toggleFavoriteCityUI } from './favoriteManager.js';
 import { startAutoRefresh, stopAutoRefresh } from './refreshManager.js';
+import { addCityToComparison } from './comparisonManager.js';
 
 let currentWeatherData = null;
 let forecastData = null;
@@ -88,6 +89,21 @@ function handleThemeToggle() {
   updateThemeIcon(newTheme);
 }
 
+function handleAddToComparison() {
+  if (!currentWeatherData) {
+    showError('No weather data loaded. Search for a city first.');
+    return;
+  }
+
+  try {
+    addCityToComparison(currentWeatherData);
+    showSuccess(`Added ${currentWeatherData.name} to comparison`);
+    renderComparisonView();
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
 function updateThemeIcon(theme) {
   if (themeToggle) {
     themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌙';
@@ -134,9 +150,7 @@ function setupEventListeners() {
   }
 
   if (compareBtn) {
-    compareBtn.addEventListener('click', () => {
-      // TODO: Implement add to comparison
-    });
+    compareBtn.addEventListener('click', handleAddToComparison);
   }
 
   if (clearCompareBtn) {
