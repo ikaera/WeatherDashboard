@@ -17,6 +17,7 @@ const pastSeachEl = document.querySelector('#past-searched-cities');
 const currentWeatherEl = document.querySelector('#weather-content');
 const weatherPlaceholder = document.querySelector('#weather-placeholder');
 const forecastEl = document.querySelector('#five-day-weather');
+const hourlyEl = document.querySelector('#hourly-weather');
 const errorMessageEl = document.querySelector('#error-message');
 const alertsEl = document.querySelector('#weather-alerts');
 const tempUnitToggle = document.querySelectorAll('input[name="tempUnit"]');
@@ -101,11 +102,41 @@ function displayCurrentWeather(currentWeather) {
   return;
 }
 
+//Build a function to display hourly weather forecast
+function displayHourlyForecast(forecast) {
+  const tempUnit = getTemperatureUnit();
+  const tempSymbol = getTemperatureSymbol(tempUnit);
+
+  hourlyEl.innerHTML = '';
+  let hoursCount = 0;
+
+  for (let i = 0; i < forecast.list.length && hoursCount < 24; i++) {
+    const temp = formatTemperature(forecast.list[i].main.temp, tempUnit);
+    const iconUrl = `https://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`;
+    const time = dayjs(forecast.list[i].dt_txt).format('h:mm A');
+    const weatherDesc = forecast.list[i].weather[0].main;
+
+    const card = document.createElement('div');
+    card.className = 'card hourly-card text-white';
+    card.innerHTML = `
+      <div class="hourly-card-time">${time}</div>
+      <div class="hourly-card-icon">
+        <img src="${iconUrl}" alt="${weatherDesc}" style="width: 30px; height: 30px;">
+      </div>
+      <div class="hourly-card-temp">${temp}${tempSymbol}</div>
+    `;
+    hourlyEl.appendChild(card);
+    hoursCount++;
+  }
+}
+
 //Build a function to display 5-day weather forecast
 function displayWeatherForecast(forecast) {
   forecastData = forecast;
   const tempUnit = getTemperatureUnit();
   const tempSymbol = getTemperatureSymbol(tempUnit);
+
+  displayHourlyForecast(forecast);
 
   forecastEl.innerHTML = '';
   let daysCount = 0;

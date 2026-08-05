@@ -61,6 +61,42 @@ html[data-theme="light"] {
   width: 100%;
 }
 
+.hourly-card {
+  background: var(--cl-primary-opacity) !important;
+  min-width: 100px;
+  max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.hourly-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.hourly-card-time {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.hourly-card-icon {
+  font-size: 1.5rem;
+  margin: 5px 0;
+}
+
+.hourly-card-temp {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 .forecast-card {
   background: var(--cl-primary-opacity) !important;
   min-height: 300px;
