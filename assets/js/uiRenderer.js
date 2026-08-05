@@ -34,6 +34,8 @@ function buildWeatherDetails(currentWeather) {
 }
 
 function renderCurrentWeather(currentWeather, onFavoriteToggle) {
+  if (!currentWeatherEl) return;
+
   const iconUrl = `https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`;
   const cityName = currentWeather.name;
   const date = formatWeatherDate(currentWeather.dt, currentWeather.timezone);
@@ -44,6 +46,7 @@ function renderCurrentWeather(currentWeather, onFavoriteToggle) {
   const favBtnClass = isFav ? 'btn-warning' : 'btn-outline-warning';
   const favBtnText = isFav ? '⭐ Remove from Favorites' : '☆ Add to Favorites';
 
+  currentWeatherEl.style.display = 'block';
   currentWeatherEl.innerHTML = `
     <div class="d-flex justify-content-between align-items-start mb-3">
       <div>
