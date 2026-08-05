@@ -1,7 +1,13 @@
 'use strict';
+// Import utilities (for browser use, we'll handle the fallback)
+const weatherUtils = typeof module !== 'undefined' && module.exports ? require('./weatherUtils') : window.weatherUtils || {};
+
 // Create global variables
 const APIKey = 'be7058c093e84628bb5922daf319347b';
 let storredCities = JSON.parse(localStorage.getItem('cities')) || [];
+let currentWeatherData = null;
+let forecastData = null;
+
 const cityFormEl = document.querySelector('form');
 const cityInput = document.querySelector('#city-input');
 const searchBtn = document.querySelector("#search-btn");
@@ -10,34 +16,35 @@ const pastSeachEl = document.querySelector('#past-searched-cities');
 const currentWeatherEl = document.querySelector('.current-weather');
 const forecastEl = document.querySelector('#five-day-weather');
 const forecastCards = document.querySelectorAll('#five-day-weather-cards');
+const tempUnitToggle = document.querySelectorAll('input[name="tempUnit"]');
 
-//Create function to display current weatehr
+//Create function to display current weather
 function displayCurrentWeather(currentWeather) {
-  // console.log(currentWeather);
-
-  // console.log(dayjs().format('MM/DD/YYYY'));
+  currentWeatherData = currentWeather;
   var iconUrl = `https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`;
 
   const cityName = currentWeather.name;
   const date = dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('ddd MM/DD/YYYY hh:mm:ss a');
-  const temp = currentWeather.main.temp;
-  const tempFeelsLike = currentWeather.main.feels_like;
+  const tempUnit = weatherUtils.getTemperatureUnit ? weatherUtils.getTemperatureUnit() : 'F';
+  const temp = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(currentWeather.main.temp, tempUnit) : currentWeather.main.temp;
+  const tempFeelsLike = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(currentWeather.main.feels_like, tempUnit) : currentWeather.main.feels_like;
   const wind = currentWeather.wind.speed;
   const humidity = currentWeather.main.humidity;
+  const tempSymbol = weatherUtils.getTemperatureSymbol ? weatherUtils.getTemperatureSymbol(tempUnit) : '°F';
 
   currentWeatherEl.innerHTML = `
   <h4 class="my-2">${cityName} </h4>
-  <h5>${date}</h5> 
+  <h5>${date}</h5>
   <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
   <div>
     <span> Temp: </span>
     <span> ${temp}</span>
-    <span>&deg;F</span>
+    <span>${tempSymbol}</span>
   </div>
   <div>
     <span> Feels: </span>
     <span>${tempFeelsLike}</span>
-    <span>&deg;F</span>
+    <span>${tempSymbol}</span>
   </div>
   <div>
     <span> Wind: </span>
@@ -45,7 +52,7 @@ function displayCurrentWeather(currentWeather) {
     <span> MPH </span>
   </div>
   <div>
-    <span> Humidity: </span>  
+    <span> Humidity: </span>
     <span>${humidity}</span>
     <span> % </span>
   </div>
@@ -56,33 +63,33 @@ function displayCurrentWeather(currentWeather) {
 //Build a function to display 5-day weather forecast.
 let days = 0;
 function displayWeatherForecast(forecast) {
-  console.log(forecast);
+  forecastData = forecast;
+  const tempUnit = weatherUtils.getTemperatureUnit ? weatherUtils.getTemperatureUnit() : 'F';
+  const tempSymbol = weatherUtils.getTemperatureSymbol ? weatherUtils.getTemperatureSymbol(tempUnit) : '°F';
+
   for (let i = 0; i < forecast.list.length; i++) {
     const cityName = forecast.city.name;
     const date = dayjs(forecast.list[i].dt_txt).format('ddd MM/DD/YYYY hh:mm:ss a');
     var iconUrl = `https://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`;
-    const temp = forecast.list[i].main.temp;
-    const tempFeelsLike = forecast.list[i].main.feels_like;
+    const temp = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(forecast.list[i].main.temp, tempUnit) : forecast.list[i].main.temp;
+    const tempFeelsLike = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(forecast.list[i].main.feels_like, tempUnit) : forecast.list[i].main.feels_like;
     const wind = forecast.list[i].wind.speed;
     const humidity = forecast.list[i].main.humidity;
 
     if (forecast.list[i].dt_txt.split(' ')[1] == '12:00:00') {
-      // let card = document.createElement(div);
-      // card.setAttribute('class','card col-2.m1 bg-primary text-white p-1 m-2');
-
       forecastCards[days].innerHTML = `
     <h4 class="my-2">${cityName} </h4>
-    <h5>${date}</h5> 
+    <h5>${date}</h5>
     <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
     <div>
       <span> Temp: </span>
       <span> ${temp}</span>
-      <span>&deg;F</span>
+      <span>${tempSymbol}</span>
     </div>
     <div>
       <span> Feels: </span>
       <span>${tempFeelsLike}</span>
-      <span>&deg;F</span>
+      <span>${tempSymbol}</span>
     </div>
     <div>
       <span> Wind: </span>
@@ -90,7 +97,7 @@ function displayWeatherForecast(forecast) {
       <span> MPH </span>
     </div>
     <div>
-      <span> Humidity: </span>  
+      <span> Humidity: </span>
       <span>${humidity}</span>
       <span> % </span>
     </div>
@@ -151,6 +158,28 @@ function getGeoCoordinates(city) {
     })
   // return;
 }
+//Add event listeners for temperature unit toggle
+tempUnitToggle.forEach(toggle => {
+  toggle.addEventListener('change', function(e) {
+    if (weatherUtils.setTemperatureUnit) {
+      weatherUtils.setTemperatureUnit(e.target.value);
+    }
+    if (currentWeatherData) {
+      displayCurrentWeather(currentWeatherData);
+    }
+    if (forecastData) {
+      displayWeatherForecast(forecastData);
+    }
+  });
+});
+
+// Initialize toggle to saved unit
+const savedUnit = weatherUtils.getTemperatureUnit ? weatherUtils.getTemperatureUnit() : 'F';
+const toggleInput = document.querySelector(`input[name="tempUnit"][value="${savedUnit}"]`);
+if (toggleInput) {
+  toggleInput.checked = true;
+}
+
 //add onload event to the window object. 
 window.onload = function () {
   // e.preventDefault();
