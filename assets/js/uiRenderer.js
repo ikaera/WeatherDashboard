@@ -164,17 +164,26 @@ function renderAlerts(weatherData) {
 
 function renderComparisonView() {
   const comparisonCities = getComparisonCities();
+  const clearCompareBtn = document.querySelector('#clear-compare-btn');
 
   if (!comparisonViewEl) return;
 
   if (comparisonCities.length === 0) {
     comparisonViewEl.innerHTML = '<p class="text-muted">No cities in comparison</p>';
+    if (clearCompareBtn) {
+      clearCompareBtn.style.display = 'none';
+    }
     return;
+  }
+
+  if (clearCompareBtn) {
+    clearCompareBtn.style.display = 'inline-block';
   }
 
   const tempUnit = getTemperatureUnit();
   const tempSymbol = getTemperatureSymbol(tempUnit);
-  let html = '<div class="comparison-grid">';
+  let html = '<h5 class="mb-3">📊 City Comparison</h5>';
+  html += '<div class="comparison-grid">';
 
   comparisonCities.forEach(city => {
     const temp = formatTemperature(city.temp, tempUnit);
