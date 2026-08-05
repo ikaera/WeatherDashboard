@@ -23,6 +23,7 @@ const themeToggle = document.querySelector('#theme-toggle');
 function handleCitySearch(city) {
   if (!city || city.trim() === '') return;
 
+  stopAutoRefresh();
   showLoading();
   saveHistory(city);
 
