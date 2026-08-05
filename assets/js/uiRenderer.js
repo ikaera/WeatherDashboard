@@ -190,14 +190,12 @@ function renderComparisonView() {
     const feelsLike = formatTemperature(city.feelsLike, tempUnit);
     html += `
       <div class="comparison-card">
-        <h5>${city.name}, ${city.country}</h5>
-        <img src="https://openweathermap.org/img/w/${city.icon}.png" alt="icon">
+        <h5>${city.name}</h5>
+        <img src="https://openweathermap.org/img/w/${city.icon}.png" alt="${city.weatherMain}">
         <p><strong>${city.weatherMain}</strong></p>
-        <p>Temp: ${temp}${tempSymbol}</p>
-        <p>Feels: ${feelsLike}${tempSymbol}</p>
-        <p>💧 ${city.humidity}%</p>
-        <p>🌬️ ${city.windSpeed} MPH</p>
-        <button class="btn btn-sm btn-danger" onclick="removeFromComparison('${city.name}')">Remove</button>
+        <p>${temp}${tempSymbol} (${feelsLike}${tempSymbol})</p>
+        <p>💧 ${city.humidity}% | 🌬️ ${Math.round(city.windSpeed)} mph</p>
+        <button class="btn btn-danger" onclick="removeFromComparison('${city.name}')">Remove</button>
       </div>
     `;
   });
