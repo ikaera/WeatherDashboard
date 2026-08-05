@@ -1,4 +1,5 @@
 import { getTemperatureUnit, setTemperatureUnit, formatTemperature, getTemperatureSymbol, calculateDewPoint, getWindDirection, formatPressure, getFavoriteCities, addFavoriteCity, removeFavoriteCity, isFavoriteCity } from './weatherUtils.js';
+import { getWeatherAlerts } from './weatherAlerts.js';
 
 let APIKey = '';
 let REFRESH_INTERVAL = 15 * 60 * 1000;
@@ -16,6 +17,7 @@ const currentWeatherEl = document.querySelector('#weather-content');
 const weatherPlaceholder = document.querySelector('#weather-placeholder');
 const forecastEl = document.querySelector('#five-day-weather');
 const errorMessageEl = document.querySelector('#error-message');
+const alertsEl = document.querySelector('#weather-alerts');
 const tempUnitToggle = document.querySelectorAll('input[name="tempUnit"]');
 const favoriteCitiesEl = document.querySelector('#favorite-cities');
 const noFavoritesEl = document.querySelector('#no-favorites');
@@ -92,6 +94,9 @@ function displayCurrentWeather(currentWeather) {
     });
   }
 
+  // Display weather alerts
+  displayAlerts(currentWeather);
+
   return;
 }
 
@@ -159,6 +164,34 @@ function showLoading() {
 function hideLoading() {
   weatherPlaceholder.style.display = 'none';
   currentWeatherEl.style.display = 'block';
+}
+
+// Display weather alerts
+function displayAlerts(weatherData) {
+  const alerts = getWeatherAlerts(weatherData);
+  alertsEl.innerHTML = '';
+
+  if (alerts.length === 0) {
+    return;
+  }
+
+  const alertsContainer = document.createElement('div');
+  alertsContainer.className = 'alert-container';
+
+  alerts.forEach(alert => {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert-item ${alert.type}`;
+    alertDiv.innerHTML = `
+      <div class="alert-icon">${alert.icon}</div>
+      <div class="alert-content">
+        <div class="alert-title">${alert.title}</div>
+        <div class="alert-message">${alert.message}</div>
+      </div>
+    `;
+    alertsContainer.appendChild(alertDiv);
+  });
+
+  alertsEl.appendChild(alertsContainer);
 }
 
 // Auto-refresh weather data

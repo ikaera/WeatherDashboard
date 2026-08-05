@@ -131,3 +131,59 @@
   font-style: italic;
 }
 
+/* Alert Styles */
+.alert-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.alert-item {
+  padding: 12px 15px;
+  border-radius: 5px;
+  border-left: 4px solid;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+}
+
+.alert-item.danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-left-color: #dc3545;
+  color: #dc3545;
+}
+
+.alert-item.warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-left-color: #ffc107;
+  color: #ff9800;
+}
+
+.alert-item.info {
+  background-color: rgba(23, 162, 184, 0.1);
+  border-left-color: #17a2b8;
+  color: #17a2b8;
+}
+
+.alert-icon {
+  font-size: 1.2rem;
+  min-width: 30px;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-weight: 600;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.alert-message {
+  margin: 3px 0 0 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
