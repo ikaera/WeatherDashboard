@@ -33,12 +33,19 @@
         <input id="city-input" type="text" name="city" class="form-control my-1 text-primary"
           placeholder="enter a city">
         <button class="btn btn-primary btn-lg my-1 search-button" type="submit" id="search-btn">Search</button>
-        <button type="button" class="btn btn-secondary btn-lg" id="clear-btn">Clear</button>
+        <button type="button" class="btn btn-secondary btn-lg" id="clear-btn">Clear History</button>
       </form>
 
-      <div class="border-top border-secondery text-center d-flex flex-row flex-wrap justify-content-flex-start my-1"
+      <div class="border-top border-secondary my-3 p-3">
+        <h5 class="mb-3">⭐ Favorites</h5>
+        <div class="d-flex flex-row flex-wrap justify-content-flex-start" id="favorite-cities">
+          <p class="text-muted text-center w-100" id="no-favorites">No favorites yet</p>
+        </div>
+      </div>
+
+      <div class="border-top border-secondary text-center d-flex flex-row flex-wrap justify-content-flex-start my-1 p-3"
         id="past-searched-cities">
-        <!-- //placeholder for historical serch-cities.  -->
+        <h5 class="w-100 mb-3">🔍 Recent Searches</h5>
       </div>
     </section>
 

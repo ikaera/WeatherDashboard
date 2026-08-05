@@ -52,6 +52,43 @@ function formatPressure(pressureMb) {
   return { mb: pressureMb, inHg: pressureIn };
 }
 
+// Favorite cities management
+const FAVORITES_KEY = 'favoriteCities';
+
+function getFavoriteCities() {
+  const favorites = localStorage.getItem(FAVORITES_KEY) || '[]';
+  return JSON.parse(favorites);
+}
+
+function addFavoriteCity(cityName) {
+  const favorites = getFavoriteCities();
+  const normalizedName = cityName.trim().toLowerCase();
+
+  if (!favorites.find(c => c.toLowerCase() === normalizedName)) {
+    favorites.push(cityName);
+    if (favorites.length > 10) {
+      favorites.shift();
+    }
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    return true;
+  }
+  return false;
+}
+
+function removeFavoriteCity(cityName) {
+  const favorites = getFavoriteCities();
+  const normalizedName = cityName.trim().toLowerCase();
+  const filtered = favorites.filter(c => c.toLowerCase() !== normalizedName);
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(filtered));
+  return favorites.length !== filtered.length;
+}
+
+function isFavoriteCity(cityName) {
+  const favorites = getFavoriteCities();
+  const normalizedName = cityName.trim().toLowerCase();
+  return favorites.some(c => c.toLowerCase() === normalizedName);
+}
+
 // Export for both Node.js and browser
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -63,7 +100,12 @@ if (typeof module !== 'undefined' && module.exports) {
     calculateDewPoint,
     getWindDirection,
     formatPressure,
+    getFavoriteCities,
+    addFavoriteCity,
+    removeFavoriteCity,
+    isFavoriteCity,
     TEMP_UNIT_KEY,
+    FAVORITES_KEY,
   };
 }
 
@@ -78,6 +120,11 @@ if (typeof window !== 'undefined') {
     calculateDewPoint,
     getWindDirection,
     formatPressure,
+    getFavoriteCities,
+    addFavoriteCity,
+    removeFavoriteCity,
+    isFavoriteCity,
     TEMP_UNIT_KEY,
+    FAVORITES_KEY,
   };
 }

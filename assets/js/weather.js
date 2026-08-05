@@ -18,6 +18,8 @@ const weatherPlaceholder = document.querySelector('#weather-placeholder');
 const forecastEl = document.querySelector('#five-day-weather');
 const errorMessageEl = document.querySelector('#error-message');
 const tempUnitToggle = document.querySelectorAll('input[name="tempUnit"]');
+const favoriteCitiesEl = document.querySelector('#favorite-cities');
+const noFavoritesEl = document.querySelector('#no-favorites');
 
 //Create function to display current weather
 function displayCurrentWeather(currentWeather) {
@@ -40,9 +42,18 @@ function displayCurrentWeather(currentWeather) {
   const sunset = dayjs((currentWeather.sys.sunset + currentWeather.timezone) * 1000).format('hh:mm a');
   const weatherDesc = currentWeather.weather[0].main;
 
+  const isFav = weatherUtils.isFavoriteCity ? weatherUtils.isFavoriteCity(cityName) : false;
+  const favBtnClass = isFav ? 'btn-warning' : 'btn-outline-warning';
+  const favBtnText = isFav ? '⭐ Remove from Favorites' : '☆ Add to Favorites';
+
   currentWeatherEl.innerHTML = `
-  <h4 class="my-2">${cityName} <small>${weatherDesc}</small></h4>
-  <h5>${date}</h5>
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      <h4 class="my-2">${cityName} <small>${weatherDesc}</small></h4>
+      <h5>${date}</h5>
+    </div>
+    <button class="btn ${favBtnClass} btn-sm" id="favorite-btn">${favBtnText}</button>
+  </div>
   <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
   <div class="row">
     <div class="col-md-6">
@@ -71,6 +82,16 @@ function displayCurrentWeather(currentWeather) {
     </div>
   </div>
 `
+  // Add event listener to favorite button
+  const favBtn = document.querySelector('#favorite-btn');
+  if (favBtn) {
+    favBtn.addEventListener('click', function () {
+      const isFavorited = toggleFavoriteCity(cityName);
+      loadFavoriteCities();
+      updateFavoriteButton();
+    });
+  }
+
   return;
 }
 
@@ -138,6 +159,58 @@ function showLoading() {
 function hideLoading() {
   weatherPlaceholder.style.display = 'none';
   currentWeatherEl.style.display = 'block';
+}
+
+// Load and display favorite cities
+function loadFavoriteCities() {
+  const favorites = weatherUtils.getFavoriteCities ? weatherUtils.getFavoriteCities() : [];
+  favoriteCitiesEl.innerHTML = '';
+
+  if (favorites.length === 0) {
+    noFavoritesEl.style.display = 'block';
+    return;
+  }
+
+  noFavoritesEl.style.display = 'none';
+  favorites.forEach(function (city) {
+    let favBtn = document.createElement('button');
+    favBtn.setAttribute('class', 'btn btn-outline-warning btn-sm mx-1 my-1');
+    favBtn.innerHTML = `⭐ ${city}`;
+    favBtn.addEventListener('click', function () {
+      getGeoCoordinates(city);
+    });
+    favoriteCitiesEl.append(favBtn);
+  });
+}
+
+// Toggle favorite status
+function toggleFavoriteCity(cityName) {
+  if (weatherUtils.isFavoriteCity && weatherUtils.removeFavoriteCity) {
+    if (weatherUtils.isFavoriteCity(cityName)) {
+      weatherUtils.removeFavoriteCity(cityName);
+      return false;
+    } else {
+      weatherUtils.addFavoriteCity(cityName);
+      return true;
+    }
+  }
+}
+
+// Update favorite button state
+function updateFavoriteButton() {
+  const favBtn = document.querySelector('#favorite-btn');
+  if (favBtn && currentWeatherData) {
+    const isFav = weatherUtils.isFavoriteCity ? weatherUtils.isFavoriteCity(currentWeatherData.name) : false;
+    if (isFav) {
+      favBtn.classList.remove('btn-outline-warning');
+      favBtn.classList.add('btn-warning');
+      favBtn.innerHTML = '⭐ Remove from Favorites';
+    } else {
+      favBtn.classList.remove('btn-warning');
+      favBtn.classList.add('btn-outline-warning');
+      favBtn.innerHTML = '☆ Add to Favorites';
+    }
+  }
 }
 
 //Make the API Call Using Fetch
@@ -229,6 +302,9 @@ if (toggleInput) {
 
 //add onload event to the window object.
 window.onload = function () {
+  loadFavoriteCities();
+  loadHistory();
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       function (myPosition) {

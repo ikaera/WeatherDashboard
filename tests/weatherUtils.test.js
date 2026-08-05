@@ -114,4 +114,75 @@ describe('Temperature Utilities', () => {
       expect(parseFloat(pressure.inHg)).toBeCloseTo(29.92, 1);
     });
   });
+
+  describe('Favorite Cities Management', () => {
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    describe('getFavoriteCities', () => {
+      it('returns empty array by default', () => {
+        expect(weatherUtils.getFavoriteCities()).toEqual([]);
+      });
+
+      it('returns saved favorites from localStorage', () => {
+        localStorage.setItem('favoriteCities', JSON.stringify(['London', 'Paris']));
+        expect(weatherUtils.getFavoriteCities()).toEqual(['London', 'Paris']);
+      });
+    });
+
+    describe('addFavoriteCity', () => {
+      it('adds a new favorite city', () => {
+        const result = weatherUtils.addFavoriteCity('New York');
+        expect(result).toBe(true);
+        expect(weatherUtils.getFavoriteCities()).toContain('New York');
+      });
+
+      it('does not add duplicate favorite', () => {
+        weatherUtils.addFavoriteCity('New York');
+        const result = weatherUtils.addFavoriteCity('New York');
+        expect(result).toBe(false);
+        expect(weatherUtils.getFavoriteCities().length).toBe(1);
+      });
+
+      it('caps favorites at 10 cities', () => {
+        for (let i = 1; i <= 12; i++) {
+          weatherUtils.addFavoriteCity(`City${i}`);
+        }
+        expect(weatherUtils.getFavoriteCities().length).toBe(10);
+        expect(weatherUtils.getFavoriteCities()).not.toContain('City1');
+      });
+    });
+
+    describe('removeFavoriteCity', () => {
+      it('removes a favorite city', () => {
+        weatherUtils.addFavoriteCity('London');
+        const result = weatherUtils.removeFavoriteCity('London');
+        expect(result).toBe(true);
+        expect(weatherUtils.getFavoriteCities()).not.toContain('London');
+      });
+
+      it('returns false when city not found', () => {
+        const result = weatherUtils.removeFavoriteCity('Nonexistent');
+        expect(result).toBe(false);
+      });
+    });
+
+    describe('isFavoriteCity', () => {
+      it('returns true for favorite city', () => {
+        weatherUtils.addFavoriteCity('London');
+        expect(weatherUtils.isFavoriteCity('London')).toBe(true);
+      });
+
+      it('returns false for non-favorite city', () => {
+        expect(weatherUtils.isFavoriteCity('London')).toBe(false);
+      });
+
+      it('is case-insensitive', () => {
+        weatherUtils.addFavoriteCity('London');
+        expect(weatherUtils.isFavoriteCity('london')).toBe(true);
+        expect(weatherUtils.isFavoriteCity('LONDON')).toBe(true);
+      });
+    });
+  });
 });
