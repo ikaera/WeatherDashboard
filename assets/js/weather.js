@@ -384,41 +384,49 @@ cityFormEl.addEventListener('submit', function (e) {
 }
 )
 //Save history to local storage
+const MAX_HISTORY = 10;
 function saveHistory(city) {
   let history = localStorage.getItem('history') || [];
   if (history.length > 0) {
     history = JSON.parse(history);
   }
-  if (history.includes(city)) return;
 
-  history.push(city);
+  const normalizedCity = city.trim();
+  const cityIndex = history.findIndex(c => c.toLowerCase() === normalizedCity.toLowerCase());
 
-  if (history.length > 4) {
+  if (cityIndex !== -1) {
+    history.splice(cityIndex, 1);
+  }
+
+  history.push(normalizedCity);
+
+  if (history.length > MAX_HISTORY) {
     history.shift();
   }
 
   localStorage.setItem("history", JSON.stringify(history));
   loadHistory();
-
 }
-// Create historical-serach button
+// Create historical-search button with weather data
 function loadHistory() {
-  pastSeachEl.innerHTML = '';
+  pastSeachEl.innerHTML = '<h5 class="w-100 mb-3">🔍 Recent Searches</h5>';
   let history = localStorage.getItem('history') || [];
   if (history.length > 0) {
     history = JSON.parse(history);
   }
 
+  if (history.length === 0) {
+    pastSeachEl.innerHTML += '<p class="text-muted w-100">No recent searches</p>';
+    return;
+  }
+
   history.forEach(function (city) {
     let searchBtn = document.createElement('button');
-    // searchBtn.classList.add('historyBtns');
+    searchBtn.setAttribute('class', 'btn btn-outline-secondary btn-sm mx-1 my-1 d-flex align-items-center gap-2');
+    searchBtn.innerHTML = `<span>🌍</span> ${city}`;
     searchBtn.addEventListener('click', function () {
       getGeoCoordinates(city)
     });
-    // searchBtn.onclick = 
-    searchBtn.setAttribute('class', 'btn btn-secondary btn-lg mx-5 my-1');
-    searchBtn.innerHTML = city;
-    // pastSeachEl.setAttribute('class', 'past-search');
     pastSeachEl.append(searchBtn);
   })
 }
