@@ -357,3 +357,80 @@ html[data-theme="light"] {
   color: var(--text-secondary);
 }
 
+/* Weather Content Display */
+#weather-content {
+  color: var(--text-primary);
+}
+
+#weather-content div,
+#weather-content h4,
+#weather-content h5,
+#weather-content p {
+  color: var(--text-primary);
+}
+
+#weather-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+[data-theme="dark"] #weather-content {
+  color: #e4e4e7;
+}
+
+[data-theme="dark"] #weather-content div,
+[data-theme="dark"] #weather-content h4,
+[data-theme="dark"] #weather-content h5,
+[data-theme="dark"] #weather-content p {
+  color: #e4e4e7;
+}
+
+[data-theme="dark"] #weather-content strong {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+/* Forecast cards text */
+.weather-card {
+  color: var(--text-primary);
+}
+
+.weather-card p,
+.weather-card div {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .weather-card {
+  color: #e4e4e7;
+}
+
+[data-theme="dark"] .weather-card p,
+[data-theme="dark"] .weather-card div {
+  color: #e4e4e7;
+}
+
+/* Weather alerts text */
+#weather-alerts {
+  color: var(--text-primary);
+}
+
+#weather-alerts h5 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] #weather-alerts h5 {
+  color: #ffd700;
+}
+
+.alert-danger {
+  color: #dc3545;
+}
+
+.alert-warning {
+  color: #ff9800;
+}
+
+.alert-info {
+  color: #17a2b8;
+}
+
