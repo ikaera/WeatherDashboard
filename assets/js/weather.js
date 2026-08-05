@@ -2,6 +2,7 @@ import { getTemperatureUnit, setTemperatureUnit, formatTemperature, getTemperatu
 
 let APIKey = '';
 let REFRESH_INTERVAL = 15 * 60 * 1000;
+let refreshTimer = null;
 let storredCities = JSON.parse(localStorage.getItem('cities')) || [];
 let currentWeatherData = null;
 let forecastData = null;
@@ -22,6 +23,7 @@ const noFavoritesEl = document.querySelector('#no-favorites');
 //Create function to display current weather
 function displayCurrentWeather(currentWeather) {
   currentWeatherData = currentWeather;
+  startAutoRefresh();
   var iconUrl = `https://openweathermap.org/img/w/${currentWeather.weather[0].icon}.png`;
 
   const cityName = currentWeather.name;
@@ -157,6 +159,39 @@ function showLoading() {
 function hideLoading() {
   weatherPlaceholder.style.display = 'none';
   currentWeatherEl.style.display = 'block';
+}
+
+// Auto-refresh weather data
+function refreshCurrentWeather() {
+  if (currentWeatherData && currentWeatherData.coord) {
+    const { lat, lon } = currentWeatherData.coord;
+    const requestUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=imperial`;
+
+    fetch(requestUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('Refresh failed');
+        return response.json();
+      })
+      .then(data => {
+        displayCurrentWeather(data);
+        if (currentWeatherData.coord.lat && currentWeatherData.coord.lon) {
+          getWeatherForcast({ latitude: currentWeatherData.coord.lat, longitude: currentWeatherData.coord.lon });
+        }
+      })
+      .catch(error => console.log('Auto-refresh error:', error));
+  }
+}
+
+function startAutoRefresh() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(refreshCurrentWeather, REFRESH_INTERVAL);
+}
+
+function stopAutoRefresh() {
+  if (refreshTimer) {
+    clearInterval(refreshTimer);
+    refreshTimer = null;
+  }
 }
 
 // Load and display favorite cities
