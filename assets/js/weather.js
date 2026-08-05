@@ -1,5 +1,6 @@
 import { getTemperatureUnit, setTemperatureUnit, formatTemperature, getTemperatureSymbol, calculateDewPoint, getWindDirection, formatPressure, getFavoriteCities, addFavoriteCity, removeFavoriteCity, isFavoriteCity } from './weatherUtils.js';
 import { getWeatherAlerts } from './weatherAlerts.js';
+import { toggleTheme, getSavedTheme } from './themeManager.js';
 
 let APIKey = '';
 let REFRESH_INTERVAL = 15 * 60 * 1000;
@@ -364,6 +365,7 @@ if (toggleInput) {
 
 //add onload event to the window object.
 window.onload = function () {
+  initializeThemeIcon();
   loadFavoriteCities();
   loadHistory();
 
@@ -468,6 +470,26 @@ clearBtn.addEventListener('click', function () {
   pastSeachEl.innerHTML = '';
   localStorage.clear();
 })
+
+// Theme toggle
+const themeToggle = document.querySelector('#theme-toggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', function () {
+    const newTheme = toggleTheme();
+    updateThemeIcon(newTheme);
+  });
+}
+
+function updateThemeIcon(theme) {
+  if (themeToggle) {
+    themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+  }
+}
+
+function initializeThemeIcon() {
+  const currentTheme = getSavedTheme();
+  updateThemeIcon(currentTheme);
+}
 
 export function initializeApp(apiKey, refreshInterval) {
   APIKey = apiKey;
