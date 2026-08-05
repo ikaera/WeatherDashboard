@@ -6,7 +6,7 @@ import { renderCurrentWeather, renderHourlyForecast, renderFiveDayForecast, rend
 import { saveHistory, loadHistory } from './historyManager.js';
 import { renderFavoriteCities, toggleFavoriteCityUI } from './favoriteManager.js';
 import { startAutoRefresh, stopAutoRefresh } from './refreshManager.js';
-import { addCityToComparison } from './comparisonManager.js';
+import { addCityToComparison, removeCityFromComparison } from './comparisonManager.js';
 
 let currentWeatherData = null;
 let forecastData = null;
@@ -103,6 +103,14 @@ function handleAddToComparison() {
     showError(error.message);
   }
 }
+
+function handleRemoveFromComparison(cityName) {
+  removeCityFromComparison(cityName);
+  renderComparisonView();
+  showSuccess(`Removed ${cityName} from comparison`);
+}
+
+window.removeFromComparison = handleRemoveFromComparison;
 
 function updateThemeIcon(theme) {
   if (themeToggle) {
