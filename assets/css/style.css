@@ -32,8 +32,44 @@
   width: 100%;
 }
 
-#five-day-weather-cards {
+.forecast-card {
   background: var(--cl-primary-opacity) !important;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.forecast-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.forecast-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.forecast-card h5 {
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.9;
+}
+
+.forecast-card img {
+  width: 60px;
+  height: auto;
+  margin: 0.5rem 0;
+}
+
+.forecast-card > div {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.forecast-card span {
+  font-weight: 500;
 }
 
 #past-searched-cities,

@@ -15,7 +15,6 @@ const clearBtn = document.querySelector('#clear-btn');
 const pastSeachEl = document.querySelector('#past-searched-cities');
 const currentWeatherEl = document.querySelector('.current-weather');
 const forecastEl = document.querySelector('#five-day-weather');
-const forecastCards = document.querySelectorAll('#five-day-weather-cards');
 const tempUnitToggle = document.querySelectorAll('input[name="tempUnit"]');
 
 //Create function to display current weather
@@ -60,52 +59,49 @@ function displayCurrentWeather(currentWeather) {
   return;
 }
 
-//Build a function to display 5-day weather forecast.
-let days = 0;
+//Build a function to display 5-day weather forecast
 function displayWeatherForecast(forecast) {
   forecastData = forecast;
   const tempUnit = weatherUtils.getTemperatureUnit ? weatherUtils.getTemperatureUnit() : 'F';
   const tempSymbol = weatherUtils.getTemperatureSymbol ? weatherUtils.getTemperatureSymbol(tempUnit) : '°F';
 
-  for (let i = 0; i < forecast.list.length; i++) {
-    const cityName = forecast.city.name;
-    const date = dayjs(forecast.list[i].dt_txt).format('ddd MM/DD/YYYY hh:mm:ss a');
-    var iconUrl = `https://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`;
-    const temp = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(forecast.list[i].main.temp, tempUnit) : forecast.list[i].main.temp;
-    const tempFeelsLike = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(forecast.list[i].main.feels_like, tempUnit) : forecast.list[i].main.feels_like;
-    const wind = forecast.list[i].wind.speed;
-    const humidity = forecast.list[i].main.humidity;
+  forecastEl.innerHTML = '';
+  let daysCount = 0;
 
-    if (forecast.list[i].dt_txt.split(' ')[1] == '12:00:00') {
-      forecastCards[days].innerHTML = `
-    <h4 class="my-2">${cityName} </h4>
-    <h5>${date}</h5>
-    <div class="my-2"> <img src="${iconUrl}" alt="icon"></div>
-    <div>
-      <span> Temp: </span>
-      <span> ${temp}</span>
-      <span>${tempSymbol}</span>
-    </div>
-    <div>
-      <span> Feels: </span>
-      <span>${tempFeelsLike}</span>
-      <span>${tempSymbol}</span>
-    </div>
-    <div>
-      <span> Wind: </span>
-      <span>${wind}</span>
-      <span> MPH </span>
-    </div>
-    <div>
-      <span> Humidity: </span>
-      <span>${humidity}</span>
-      <span> % </span>
-    </div>
-  `
-      days++;
+  for (let i = 0; i < forecast.list.length && daysCount < 5; i++) {
+    const timeStr = forecast.list[i].dt_txt.split(' ')[1];
+    // Show forecast for noon (12:00:00) or closest time if noon not available
+    if (timeStr === '12:00:00' || (daysCount === 0 && i === 0)) {
+      const cityName = forecast.city.name;
+      const date = dayjs(forecast.list[i].dt_txt).format('ddd MM/DD');
+      const iconUrl = `https://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`;
+      const temp = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(forecast.list[i].main.temp, tempUnit) : forecast.list[i].main.temp;
+      const wind = forecast.list[i].wind.speed;
+      const humidity = forecast.list[i].main.humidity;
+      const weatherDesc = forecast.list[i].weather[0].main;
+
+      const card = document.createElement('div');
+      card.className = 'card forecast-card col-md-2 col-sm-4 text-white p-3 m-2';
+      card.innerHTML = `
+        <h4 class="my-2">${date}</h4>
+        <div class="my-2">
+          <img src="${iconUrl}" alt="${weatherDesc}">
+          <p>${weatherDesc}</p>
+        </div>
+        <div>
+          <span>Temp:</span> ${temp}${tempSymbol}
+        </div>
+        <div>
+          <span>Wind:</span> ${wind} MPH
+        </div>
+        <div>
+          <span>Humidity:</span> ${humidity}%
+        </div>
+      `;
+      forecastEl.appendChild(card);
+      daysCount++;
     }
   }
-  days = 0;
 }
 
 //Make the API Call Using Fetch
