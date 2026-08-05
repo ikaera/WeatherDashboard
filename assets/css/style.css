@@ -74,6 +74,7 @@ html[data-theme="light"] {
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
   flex-shrink: 0;
+  color: #ffffff;
 }
 
 .hourly-card:hover {
@@ -103,6 +104,7 @@ html[data-theme="light"] {
   display: flex;
   flex-direction: column;
   transition: transform 0.2s, box-shadow 0.2s;
+  color: #ffffff;
 }
 
 .forecast-card:hover {
