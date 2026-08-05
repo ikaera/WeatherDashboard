@@ -1,204 +1,276 @@
-# WeatherDashboard-Server-Side-API
+# Weather Dashboard
 
-## Description
+A modern, feature-rich weather application that provides real-time weather data, forecasts, and intelligent weather alerts for travelers planning trips.
 
-AS A traveler
-I WANT to see the weather outlook for multiple cities,
-SO THAT I can plan a trip accordingly.
+## Table of Contents
 
-
-    GIVEN a weather dashboard with form inputs:
-    - WHEN I search for a city,
-        - THEN I am presented with current and future conditions for that city and that city is added to the search history;
-    - WHEN I view current weather conditions for that city,
-        - THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, and the wind speed;
-    - WHEN I view future weather conditions for that city,
-        - THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity;
-    - WHEN I click on a city in the search history,
-        - THEN I am again presented with current and future conditions for that city.
-
-<!-- Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
-
-- What was your motivation?
-- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-- What problem does it solve?
-- What did you learn? -->
-
-<!-- ## Table of Contents (Optional) -->
-
-<!-- If your README is long, add a table of contents to make it easy for users to find what they need. -->
-
-<!-- - [Installation](#installation)
+- [Overview](#overview)
+- [Features](#features)
+- [Live Demo](#live-demo)
+- [Getting Started](#getting-started)
 - [Usage](#usage)
-- [Credits](#credits)
-- [License](#license)
+- [Architecture](#architecture)
+- [Technologies](#technologies)
+- [Testing](#testing)
+- [Contributing](#contributing)
 
-## Installation
+## Overview
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running. -->
+Weather Dashboard helps travelers plan their trips by providing comprehensive weather information for multiple cities. Search for any city to see current conditions, 5-day forecasts, hourly trends, and intelligent weather alerts based on dangerous conditions.
 
-## Usage
+### User Story
 
-<!-- Provide instructions and examples for use. Include screenshots as needed.
+As a traveler, I want to see the weather outlook for multiple cities so that I can plan my trip accordingly.
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+### Core Requirements
 
-    ```md -->
-
-### Screenshot:
-![alt text](./assets/images/Screenshot.png)
-
-### Links: 
-
-- [Live App](https://ikaera.github.io/WeatherDashboard/)
-- [GitHub Repository](https://github.com/ikaera/WeatherDashboard)
-
-
-<!--     
-
-## Credits
-
-List your collaborators, if any, with links to their GitHub profiles.
-
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
-
-If you followed tutorials, include links to those here as well.
-
-## License
-
-The last section of a high-quality README file is the license. This lets other developers know what they can and cannot do with your project. If you need help choosing a license, refer to [https://choosealicense.com/](https://choosealicense.com/).
-
----
-
-🏆 The previous sections are the bare minimum, and your project will ultimately determine the content of this document. You might also want to consider adding the following sections.
-
-## Badges
-
-![badmath](https://img.shields.io/github/languages/top/lernantino/badmath)
-
-Badges aren't necessary, per se, but they demonstrate street cred. Badges let other developers know that you know what you're doing. Check out the badges hosted by [shields.io](https://shields.io/). You may not understand what they all represent now, but you will in time. -->
+- Search for cities and view current weather conditions
+- See 5-day weather forecasts
+- View hourly forecasts for the next 24 hours
+- Access search history for quick lookups
+- Receive alerts for extreme weather conditions
+- Compare multiple cities side-by-side
+- Toggle between temperature units (Fahrenheit/Celsius)
+- Use the app offline with service worker support
 
 ## Features
 
-    - Server-side APIs;
-    - JavaSctipt;
-    - HTML;
-    - Bootstrap.
+### Current Weather Display
 
+- Real-time temperature and "feels like" conditions
+- Weather description with icon
+- Wind speed and direction
+- Humidity levels
+- Atmospheric pressure
+- Dew point calculation
+- Visibility range
+- Sunrise and sunset times
 
+### Forecasting
 
-<!-- ## How to Contribute
+- 5-day weather forecast with daily conditions
+- 24-hour hourly forecast with horizontal scroll
+- Temperature, wind, and humidity for each period
+- Weather icons for visual reference
 
-If you created an application or package and would like other developers to contribute it, you can include guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own if you'd prefer.
+### Smart Features
 
-## Tests
+- **Weather Alerts**: Automatic warnings for extreme heat (115F+), freezing (10F-), dangerous winds (40+ MPH), and low pressure systems
+- **Multiple City Comparison**: Compare up to 5 cities side-by-side
+- **Favorite Cities**: Star favorite locations for quick access
+- **Search History**: Track last 10 searched cities
+- **Auto-Refresh**: Weather data updates automatically every 15 minutes
 
+### User Interface
 
+- Dark/Light theme toggle with system preference detection
+- Temperature unit toggle (Fahrenheit/Celsius)
+- Responsive design for mobile and desktop
+- Error handling with user-friendly messages
+- Loading states and spinners
 
-<<<<>>>><<<<<<<<<<<<<<>>>>>>>>>>>>>> -->
+### Offline & PWA
 
-<!-- <div><h1 align="center">Server-Side APIs Challenge: Weather Dashboard</h1> </div> -->
-<!-- 
-## Your Task
+- Progressive Web App (PWA) support
+- Service worker caching for offline access
+- Installable as a native app on mobile/desktop
+- Works without internet after initial load
 
-Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+## Live Demo
 
-Use the [5 Day Weather Forecast](https://openweathermap.org/forecast5) to retrieve weather data for cities. The base URL should look like the following: `https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}`. After registering for a new API key, you may need to wait up to 2 hours for that API key to activate.
+Visit the live application: https://ikaera.github.io/WeatherDashboard/
 
-**Hint**: Using the 5 Day Weather Forecast API, you'll notice that you will need to pass in coordinates instead of just a city name. Using the OpenWeatherMap APIs, how could we retrieve geographical coordinates given a city name?
+## Getting Started
 
-You will use `localStorage` to store any persistent data. For more information on how to work with the OpenWeather API, refer to the [Full-Stack Blog on how to use API keys](https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys).
+### Prerequisites
 
-## User Story
+- Node.js 14+ (for development/testing)
+- OpenWeatherMap API key (free tier available at https://openweathermap.org/api)
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/ikaera/WeatherDashboard.git
+   cd WeatherDashboard
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Create configuration file
+   ```bash
+   cp assets/js/config.example.js assets/js/config.js
+   ```
+
+4. Add your API key to `assets/js/config.js`
+   ```javascript
+   export const API_KEY = 'your_api_key_here';
+   export const REFRESH_INTERVAL = 15 * 60 * 1000; // 15 minutes
+   ```
+
+### Development
+
+Run tests to verify setup:
+```bash
+npm test
+```
+
+Watch mode for development:
+```bash
+npm run test:watch
+```
+
+View coverage report:
+```bash
+npm test -- --coverage
+```
+
+## Usage
+
+1. **Search for a City**
+   - Enter city name in search box
+   - Click Search or press Enter
+   - Current weather and forecasts display immediately
+
+2. **View Current Weather**
+   - Shows temperature, conditions, wind, humidity, pressure, and more
+   - Display updates in real-time every 15 minutes
+
+3. **Check Forecasts**
+   - Hourly forecast: 24-hour scrollable view
+   - 5-day forecast: Daily overview with conditions
+
+4. **Manage Cities**
+   - Star button: Add/remove from favorites
+   - Recent Searches: Click to view again
+   - Compare Cities: Add up to 5 for side-by-side view
+
+5. **Customize**
+   - Toggle theme: Use moon/sun button in header
+   - Change units: Switch between F/C in header
+   - Auto-refresh: Updates every 15 minutes
+
+## Architecture
+
+### Technology Stack
+
+- **Frontend**: Vanilla JavaScript (ES6 modules)
+- **Styling**: Bootstrap 5, custom CSS
+- **APIs**: OpenWeatherMap (Weather data)
+- **Storage**: localStorage (Preferences, history, favorites)
+- **Caching**: Service Worker (Offline support)
+- **Testing**: Jest (Unit tests)
+- **Build**: No build step required (vanilla + CDN)
+
+### File Structure
 
 ```
-AS A traveler
-I WANT to see the weather outlook for multiple cities
-SO THAT I can plan a trip accordingly
+assets/
+  js/
+    main.js                 # Application entry point
+    weather.js              # Core app logic
+    weatherUtils.js         # Utility functions
+    weatherAlerts.js        # Alert detection
+    themeManager.js         # Theme system
+    comparisonManager.js    # City comparison
+    config.js               # API configuration
+  css/
+    style.css               # Styles with theme variables
+
+index.html                  # Main HTML file
+manifest.json               # PWA manifest
+service-worker.js           # Service worker for caching
+jest.config.js              # Jest configuration
+
+tests/
+  weatherUtils.test.js       # Unit tests (29 tests)
 ```
 
-## Acceptance Criteria
+### Module Organization
 
+- **weather.js**: DOM manipulation, event handling, API coordination
+- **weatherUtils.js**: Temperature conversion, favorite/history management (100% tested)
+- **weatherAlerts.js**: Weather condition analysis and alert detection
+- **themeManager.js**: Light/dark theme logic with system preference support
+- **comparisonManager.js**: Multi-city comparison data management
+
+## Technologies
+
+- **JavaScript (ES6+)**: Modern syntax with import/export modules
+- **Bootstrap 5**: Responsive CSS framework
+- **OpenWeatherMap API**: Real-time weather data
+- **Service Workers**: Offline caching and PWA support
+- **localStorage**: Client-side data persistence
+- **Day.js**: Date and time formatting
+- **Jest**: Unit testing framework
+
+## Testing
+
+All utility functions have 100% test coverage (29 passing tests).
+
+```bash
+npm test              # Run all tests
+npm run test:watch   # Watch mode
+npm test -- --coverage  # Coverage report
 ```
-GIVEN a weather dashboard with form inputs
-WHEN I search for a city
-THEN I am presented with current and future conditions for that city and that city is added to the search history
-WHEN I view current weather conditions for that city
-THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, and the wind speed
-WHEN I view future weather conditions for that city
-THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-WHEN I click on a city in the search history
-THEN I am again presented with current and future conditions for that city
-```
 
-## Mock-Up
+Test files:
+- `tests/weatherUtils.test.js`: Temperature conversion, favorites, history management
 
-The following image shows the web application's appearance and functionality:
+## API Details
 
-![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for Atlanta.](./Assets/06-server-side-apis-homework-demo.png)
+### Endpoints Used
 
-## Grading Requirements
+1. **Current Weather**
+   - Endpoint: `/data/2.5/weather`
+   - Returns: Current conditions, temperature, wind, humidity, pressure
 
-> **Note**: If a Challenge assignment submission is marked as “0”, it is considered incomplete and will not count towards your graduation requirements. Examples of incomplete submissions include the following:
->
-> * A repository that has no code
->
-> * A repository that includes a unique name but nothing else
->
-> * A repository that includes only a README file but nothing else
->
-> * A repository that only includes starter code
+2. **5-Day Forecast**
+   - Endpoint: `/data/2.5/forecast`
+   - Returns: Hourly data for 5 days (40 data points)
 
-This Challenge is graded based on the following criteria: 
+### API Key Setup
 
-### Technical Acceptance Criteria: 40%
+Get a free API key:
+1. Visit https://openweathermap.org/api
+2. Sign up for a free account
+3. Generate API key from dashboard
+4. Add to `assets/js/config.js`
 
-* Satisfies all of the above acceptance criteria plus the following:
+## Contributing
 
-    * Uses the OpenWeather API to retrieve weather data.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-    * Uses `localStorage` to store persistent data.
+Quick start:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add/update tests
+5. Submit a pull request
 
-### Deployment: 32%
+For detailed contribution guidelines, see CONTRIBUTING.md.
 
-* Application deployed at live URL.
+## Resources
 
-* Application loads with no errors.
+- OpenWeatherMap API Documentation: https://openweathermap.org/api
+- Bootstrap 5: https://getbootstrap.com/
+- Day.js: https://day.js.org/
+- Service Workers: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
+- Progressive Web Apps: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
 
-* Application GitHub URL submitted.
+## License
 
-* GitHub repository that contains application code.
+This project is licensed under the MIT License - see LICENSE file for details.
 
-### Application Quality: 15%
+## Version History
 
-* Application user experience is intuitive and easy to navigate.
+- v3.0.0: Added dark theme, weather alerts, hourly forecast, city comparison, PWA support
+- v2.0.0: Added temperature toggle, favorite cities, improved forecast display
+- v1.0.0: Initial release with current weather and 5-day forecast
 
-* Application user interface style is clean and polished.
+---
 
-* Application resembles the mock-up functionality provided in the Challenge instructions.
-
-### Repository Quality: 13%
-
-* Repository has a unique name.
-
-* Repository follows best practices for file structure and naming conventions.
-
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-* Repository contains multiple descriptive commit messages.
-
-* Repository contains quality readme file with description, screenshot, and link to deployed application.
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* The URL of the functional, deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a readme describing the project.
-
-- - -
-© 2022 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
-
-
-*// -->
+Built with focus on user experience, code quality, and offline accessibility.
