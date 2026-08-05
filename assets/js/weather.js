@@ -1,9 +1,7 @@
-'use strict';
-// Import utilities (for browser use, we'll handle the fallback)
-const weatherUtils = typeof module !== 'undefined' && module.exports ? require('./weatherUtils') : window.weatherUtils || {};
+import { getTemperatureUnit, setTemperatureUnit, formatTemperature, getTemperatureSymbol, calculateDewPoint, getWindDirection, formatPressure, getFavoriteCities, addFavoriteCity, removeFavoriteCity, isFavoriteCity } from './weatherUtils.js';
 
-// Create global variables
-const APIKey = 'be7058c093e84628bb5922daf319347b';
+let APIKey = '';
+let REFRESH_INTERVAL = 15 * 60 * 1000;
 let storredCities = JSON.parse(localStorage.getItem('cities')) || [];
 let currentWeatherData = null;
 let forecastData = null;
@@ -28,21 +26,21 @@ function displayCurrentWeather(currentWeather) {
 
   const cityName = currentWeather.name;
   const date = dayjs((currentWeather.dt + currentWeather.timezone) * 1000).format('ddd MM/DD/YYYY hh:mm:ss a');
-  const tempUnit = weatherUtils.getTemperatureUnit ? weatherUtils.getTemperatureUnit() : 'F';
-  const temp = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(currentWeather.main.temp, tempUnit) : currentWeather.main.temp;
-  const tempFeelsLike = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(currentWeather.main.feels_like, tempUnit) : currentWeather.main.feels_like;
+  const tempUnit = getTemperatureUnit();
+  const temp = formatTemperature(currentWeather.main.temp, tempUnit);
+  const tempFeelsLike = formatTemperature(currentWeather.main.feels_like, tempUnit);
   const wind = currentWeather.wind.speed;
   const humidity = currentWeather.main.humidity;
-  const tempSymbol = weatherUtils.getTemperatureSymbol ? weatherUtils.getTemperatureSymbol(tempUnit) : '°F';
-  const windDir = weatherUtils.getWindDirection ? weatherUtils.getWindDirection(currentWeather.wind.deg) : '';
-  const pressure = weatherUtils.formatPressure ? weatherUtils.formatPressure(currentWeather.main.pressure) : {};
-  const dewPoint = weatherUtils.calculateDewPoint ? weatherUtils.calculateDewPoint(currentWeather.main.temp, humidity) : 'N/A';
+  const tempSymbol = getTemperatureSymbol(tempUnit);
+  const windDir = getWindDirection(currentWeather.wind.deg);
+  const pressure = formatPressure(currentWeather.main.pressure);
+  const dewPoint = calculateDewPoint(currentWeather.main.temp, humidity);
   const visibility = (currentWeather.visibility / 1000).toFixed(1);
   const sunrise = dayjs((currentWeather.sys.sunrise + currentWeather.timezone) * 1000).format('hh:mm a');
   const sunset = dayjs((currentWeather.sys.sunset + currentWeather.timezone) * 1000).format('hh:mm a');
   const weatherDesc = currentWeather.weather[0].main;
 
-  const isFav = weatherUtils.isFavoriteCity ? weatherUtils.isFavoriteCity(cityName) : false;
+  const isFav = isFavoriteCity(cityName);
   const favBtnClass = isFav ? 'btn-warning' : 'btn-outline-warning';
   const favBtnText = isFav ? '⭐ Remove from Favorites' : '☆ Add to Favorites';
 
@@ -98,8 +96,8 @@ function displayCurrentWeather(currentWeather) {
 //Build a function to display 5-day weather forecast
 function displayWeatherForecast(forecast) {
   forecastData = forecast;
-  const tempUnit = weatherUtils.getTemperatureUnit ? weatherUtils.getTemperatureUnit() : 'F';
-  const tempSymbol = weatherUtils.getTemperatureSymbol ? weatherUtils.getTemperatureSymbol(tempUnit) : '°F';
+  const tempUnit = getTemperatureUnit();
+  const tempSymbol = getTemperatureSymbol(tempUnit);
 
   forecastEl.innerHTML = '';
   let daysCount = 0;
@@ -111,7 +109,7 @@ function displayWeatherForecast(forecast) {
       const cityName = forecast.city.name;
       const date = dayjs(forecast.list[i].dt_txt).format('ddd MM/DD');
       const iconUrl = `https://openweathermap.org/img/w/${forecast.list[i].weather[0].icon}.png`;
-      const temp = weatherUtils.formatTemperature ? weatherUtils.formatTemperature(forecast.list[i].main.temp, tempUnit) : forecast.list[i].main.temp;
+      const temp = formatTemperature(forecast.list[i].main.temp, tempUnit);
       const wind = forecast.list[i].wind.speed;
       const humidity = forecast.list[i].main.humidity;
       const weatherDesc = forecast.list[i].weather[0].main;
@@ -163,7 +161,7 @@ function hideLoading() {
 
 // Load and display favorite cities
 function loadFavoriteCities() {
-  const favorites = weatherUtils.getFavoriteCities ? weatherUtils.getFavoriteCities() : [];
+  const favorites = getFavoriteCities();
   favoriteCitiesEl.innerHTML = '';
 
   if (favorites.length === 0) {
@@ -185,14 +183,12 @@ function loadFavoriteCities() {
 
 // Toggle favorite status
 function toggleFavoriteCity(cityName) {
-  if (weatherUtils.isFavoriteCity && weatherUtils.removeFavoriteCity) {
-    if (weatherUtils.isFavoriteCity(cityName)) {
-      weatherUtils.removeFavoriteCity(cityName);
-      return false;
-    } else {
-      weatherUtils.addFavoriteCity(cityName);
-      return true;
-    }
+  if (isFavoriteCity(cityName)) {
+    removeFavoriteCity(cityName);
+    return false;
+  } else {
+    addFavoriteCity(cityName);
+    return true;
   }
 }
 
@@ -200,7 +196,7 @@ function toggleFavoriteCity(cityName) {
 function updateFavoriteButton() {
   const favBtn = document.querySelector('#favorite-btn');
   if (favBtn && currentWeatherData) {
-    const isFav = weatherUtils.isFavoriteCity ? weatherUtils.isFavoriteCity(currentWeatherData.name) : false;
+    const isFav = isFavoriteCity(currentWeatherData.name);
     if (isFav) {
       favBtn.classList.remove('btn-outline-warning');
       favBtn.classList.add('btn-warning');
@@ -281,9 +277,7 @@ function getGeoCoordinates(city) {
 //Add event listeners for temperature unit toggle
 tempUnitToggle.forEach(toggle => {
   toggle.addEventListener('change', function(e) {
-    if (weatherUtils.setTemperatureUnit) {
-      weatherUtils.setTemperatureUnit(e.target.value);
-    }
+    setTemperatureUnit(e.target.value);
     if (currentWeatherData) {
       displayCurrentWeather(currentWeatherData);
     }
@@ -294,7 +288,7 @@ tempUnitToggle.forEach(toggle => {
 });
 
 // Initialize toggle to saved unit
-const savedUnit = weatherUtils.getTemperatureUnit ? weatherUtils.getTemperatureUnit() : 'F';
+const savedUnit = getTemperatureUnit();
 const toggleInput = document.querySelector(`input[name="tempUnit"][value="${savedUnit}"]`);
 if (toggleInput) {
   toggleInput.checked = true;
@@ -395,8 +389,11 @@ function loadHistory() {
 }
 
 clearBtn.addEventListener('click', function () {
-
   pastSeachEl.innerHTML = '';
   localStorage.clear();
 })
-// pastSeachEl.addEventListener('click', getGeoCoordinates)
+
+export function initializeApp(apiKey, refreshInterval) {
+  APIKey = apiKey;
+  REFRESH_INTERVAL = refreshInterval;
+}

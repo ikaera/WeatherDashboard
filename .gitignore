@@ -9,3 +9,7 @@ build/
 .vscode/
 .idea/
 coverage/
+config.js
+.DS_Store
+*.swp
+*.swo

@@ -89,29 +89,9 @@ function isFavoriteCity(cityName) {
   return favorites.some(c => c.toLowerCase() === normalizedName);
 }
 
-// Export for both Node.js and browser
+// CommonJS exports for Node.js/Jest
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    getTemperatureUnit,
-    setTemperatureUnit,
-    convertTemperature,
-    formatTemperature,
-    getTemperatureSymbol,
-    calculateDewPoint,
-    getWindDirection,
-    formatPressure,
-    getFavoriteCities,
-    addFavoriteCity,
-    removeFavoriteCity,
-    isFavoriteCity,
-    TEMP_UNIT_KEY,
-    FAVORITES_KEY,
-  };
-}
-
-// Make available globally in browser
-if (typeof window !== 'undefined') {
-  window.weatherUtils = {
     getTemperatureUnit,
     setTemperatureUnit,
     convertTemperature,
