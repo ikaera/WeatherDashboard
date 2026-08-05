@@ -45,6 +45,7 @@ function handleCitySearch(city) {
       forecastData = data;
       renderHourlyForecast(data);
       renderFiveDayForecast(data);
+      loadHistory(handleCitySearch);
     })
     .catch(error => {
       hideLoading();

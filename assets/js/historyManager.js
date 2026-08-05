@@ -24,7 +24,6 @@ function saveHistory(city) {
   }
 
   localStorage.setItem('history', JSON.stringify(history));
-  loadHistory();
 }
 
 function getHistory() {
