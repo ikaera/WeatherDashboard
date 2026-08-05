@@ -152,8 +152,7 @@ function setupEventListeners() {
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       localStorage.removeItem('history');
-      const pastSearchEl = document.querySelector('#past-searched-cities');
-      if (pastSearchEl) pastSearchEl.innerHTML = '';
+      loadHistory(handleCitySearch);
     });
   }
 

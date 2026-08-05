@@ -1,5 +1,8 @@
 const MAX_HISTORY = 10;
-const pastSearchEl = document.querySelector('#past-searched-cities');
+
+function getPastSearchEl() {
+  return document.querySelector('#past-searched-cities');
+}
 
 function saveHistory(city) {
   let history = localStorage.getItem('history') || [];
@@ -30,6 +33,7 @@ function getHistory() {
 }
 
 function loadHistory(onCitySelect) {
+  const pastSearchEl = getPastSearchEl();
   if (!pastSearchEl) return;
 
   pastSearchEl.innerHTML = '<h5 class="w-100 mb-3">🔍 Recent Searches</h5>';
@@ -52,6 +56,7 @@ function loadHistory(onCitySelect) {
 }
 
 function clearHistory() {
+  const pastSearchEl = getPastSearchEl();
   if (pastSearchEl) {
     pastSearchEl.innerHTML = '';
   }
